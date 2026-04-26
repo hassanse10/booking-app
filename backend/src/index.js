@@ -10,7 +10,11 @@ const availabilityRoutes = require('./routes/availability');
 const studentsRoutes     = require('./routes/students');
 const analyticsRoutes    = require('./routes/analytics');
 const pool               = require('./config/database');
-const { sendReminderEmails } = require('./services/emailService');
+const {
+  sendReminderEmails,
+  send24hReminderEmails,
+  detectAndNotifyNoShows,
+} = require('./services/emailService');
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
@@ -80,9 +84,19 @@ const seedDemo = async () => {
 seedDemo();
 cron.schedule('*/30 * * * *', seedDemo);
 
-// Reminder emails every hour
+// 1h reminder emails — every hour
 cron.schedule('0 * * * *', () => {
-  sendReminderEmails().catch((err) => console.error('Reminder cron error:', err));
+  sendReminderEmails().catch((err) => console.error('1h reminder cron error:', err));
+});
+
+// 24h reminder emails — every day at 6pm
+cron.schedule('0 18 * * *', () => {
+  send24hReminderEmails().catch((err) => console.error('24h reminder cron error:', err));
+});
+
+// No-show detection — every 15 minutes
+cron.schedule('*/15 * * * *', () => {
+  detectAndNotifyNoShows().catch((err) => console.error('No-show cron error:', err));
 });
 
 app.listen(PORT, () => console.log(`Backend running → http://localhost:${PORT}`));

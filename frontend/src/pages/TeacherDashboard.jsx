@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import SessionNotesModal from '../components/SessionNotesModal';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const DAYS       = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
@@ -243,6 +245,7 @@ function ModifyModal({ booking, availableDays, onClose, onSaved }) {
 // ── Main Dashboard ────────────────────────────────────────────────────────────
 export default function TeacherDashboard() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [tab, setTab]    = useState('bookings');
 
   // Bookings
@@ -250,6 +253,7 @@ export default function TeacherDashboard() {
   const [bookingsLoading, setBookingsLoading] = useState(true);
   const [statusFilter,    setStatusFilter]    = useState('all');
   const [modifyTarget,    setModifyTarget]    = useState(null);
+  const [notesTarget,     setNotesTarget]     = useState(null);
 
   // Availability
   const [availability, setAvailability] = useState([]);
@@ -366,7 +370,11 @@ export default function TeacherDashboard() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate('/analytics')}
+              className="px-3 py-1.5 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition hidden sm:inline-block">
+              📊 Analyses
+            </button>
             <div className="text-right hidden sm:block">
               <p className="font-semibold text-sm text-gray-900">{user.first_name}</p>
               <p className="text-xs text-gray-400">Professeur</p>
@@ -458,9 +466,28 @@ export default function TeacherDashboard() {
                           🔗 Rejoindre la séance
                         </a>
                       )}
+                      {/* Student feedback badge */}
+                      {b.student_rating > 0 && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <span className="text-amber-400 text-sm">{'★'.repeat(b.student_rating)}{'☆'.repeat(5 - b.student_rating)}</span>
+                          {b.student_feedback && (
+                            <span className="text-xs text-gray-500 italic">"{b.student_feedback.slice(0, 60)}{b.student_feedback.length > 60 ? '…' : ''}"</span>
+                          )}
+                        </div>
+                      )}
+                      {/* Teacher notes badge */}
+                      {b.teacher_notes && (
+                        <p className="mt-1.5 text-xs text-gray-400 flex items-center gap-1">
+                          📝 <span className="italic">{b.teacher_notes.slice(0, 70)}{b.teacher_notes.length > 70 ? '…' : ''}</span>
+                        </p>
+                      )}
                     </div>
                     {b.status === 'confirmed' && (
-                      <div className="flex gap-2 shrink-0">
+                      <div className="flex gap-2 shrink-0 flex-wrap justify-end">
+                        <button onClick={() => setNotesTarget(b)}
+                          className="px-3 py-1.5 text-xs border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 transition font-semibold">
+                          📝 Notes
+                        </button>
                         <button onClick={() => setModifyTarget(b)}
                           className="px-3 py-1.5 text-xs border border-purple-200 text-purple-700 rounded-lg hover:bg-purple-50 transition font-semibold">
                           Modifier
@@ -580,6 +607,15 @@ export default function TeacherDashboard() {
           availableDays={availableDays}
           onClose={() => setModifyTarget(null)}
           onSaved={() => { setModifyTarget(null); fetchBookings(); }}
+        />
+      )}
+
+      {/* Session Notes Modal */}
+      {notesTarget && (
+        <SessionNotesModal
+          booking={notesTarget}
+          onClose={() => setNotesTarget(null)}
+          onSaved={() => { setNotesTarget(null); fetchBookings(); }}
         />
       )}
     </div>

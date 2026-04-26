@@ -408,6 +408,10 @@ export default function StudentDashboard() {
               {t.label}
             </button>
           ))}
+          <button onClick={() => navigate('/progress')}
+            className="px-5 py-2 rounded-lg text-sm font-semibold transition text-gray-500 hover:text-gray-800">
+            📈 Progression
+          </button>
         </div>
       </div>
 
