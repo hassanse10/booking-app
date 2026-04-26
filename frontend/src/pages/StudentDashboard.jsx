@@ -628,8 +628,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
-// Re-export helper used inside ModifyModal closure
-function getDuration(v) {
-  return DURATIONS.find((d) => d.value === parseInt(v));
-}
