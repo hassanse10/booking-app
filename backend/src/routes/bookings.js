@@ -259,4 +259,123 @@ router.delete('/:id', authenticateToken, async (req, res) => {
   }
 });
 
+// POST /api/bookings/:id/notes  — teacher only
+router.post('/:id/notes', authenticateToken, async (req, res) => {
+  if (req.user.role !== 'teacher')
+    return res.status(403).json({ error: 'Only teachers can add session notes' });
+
+  const { teacher_notes, topics_covered, homework_assigned, next_focus_areas } = req.body;
+  if (!teacher_notes)
+    return res.status(400).json({ error: 'teacher_notes is required' });
+
+  try {
+    const { rows: bookingRows } = await pool.query(
+      'SELECT * FROM bookings WHERE id=$1',
+      [req.params.id]
+    );
+    if (!bookingRows.length)
+      return res.status(404).json({ error: 'Booking not found' });
+
+    // Update booking with teacher notes
+    await pool.query(
+      `UPDATE bookings SET teacher_notes=$1, updated_at=NOW() WHERE id=$2`,
+      [teacher_notes, req.params.id]
+    );
+
+    // If other feedback fields provided, create/update session_feedback
+    if (topics_covered || homework_assigned || next_focus_areas) {
+      await pool.query(
+        `INSERT INTO session_feedback (booking_id, student_id, topics_covered, homework_assigned, next_focus_areas)
+         VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT (booking_id) DO UPDATE SET
+         topics_covered = COALESCE($3, session_feedback.topics_covered),
+         homework_assigned = COALESCE($4, session_feedback.homework_assigned),
+         next_focus_areas = COALESCE($5, session_feedback.next_focus_areas)`,
+        [req.params.id, bookingRows[0].student_id, topics_covered, homework_assigned, next_focus_areas]
+      );
+    }
+
+    const { rows } = await pool.query(
+      'SELECT * FROM bookings WHERE id=$1',
+      [req.params.id]
+    );
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Add notes error:', err.message, err.code);
+    res.status(500).json({ error: 'Failed to add notes', detail: err.message });
+  }
+});
+
+// POST /api/bookings/:id/feedback  — student and teacher can provide feedback
+router.post('/:id/feedback', authenticateToken, async (req, res) => {
+  const { student_rating, teacher_rating, student_feedback, teacher_feedback } = req.body;
+
+  try {
+    const { rows: bookingRows } = await pool.query(
+      'SELECT * FROM bookings WHERE id=$1',
+      [req.params.id]
+    );
+    if (!bookingRows.length)
+      return res.status(404).json({ error: 'Booking not found' });
+
+    const booking = bookingRows[0];
+
+    // Students can only provide student_rating/feedback, teachers can provide teacher_rating/feedback
+    if (req.user.role === 'student' && booking.student_id !== req.user.id)
+      return res.status(403).json({ error: 'Access denied' });
+
+    // Create or update session_feedback
+    const { rows } = await pool.query(
+      `INSERT INTO session_feedback (booking_id, student_id, student_rating, student_feedback, teacher_rating, teacher_feedback)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (booking_id) DO UPDATE SET
+       student_rating = COALESCE($3, session_feedback.student_rating),
+       student_feedback = COALESCE($4, session_feedback.student_feedback),
+       teacher_rating = COALESCE($5, session_feedback.teacher_rating),
+       teacher_feedback = COALESCE($6, session_feedback.teacher_feedback),
+       created_at = CASE WHEN session_feedback.created_at IS NULL THEN NOW() ELSE session_feedback.created_at END
+       RETURNING *`,
+      [req.params.id, booking.student_id, student_rating || null, student_feedback || null, teacher_rating || null, teacher_feedback || null]
+    );
+
+    // Also update bookings table with ratings
+    if (student_rating) {
+      await pool.query(
+        'UPDATE bookings SET student_rating=$1, updated_at=NOW() WHERE id=$2',
+        [student_rating, req.params.id]
+      );
+    }
+    if (teacher_rating && req.user.role === 'teacher') {
+      await pool.query(
+        'UPDATE bookings SET teacher_rating=$1, updated_at=NOW() WHERE id=$2',
+        [teacher_rating, req.params.id]
+      );
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Add feedback error:', err.message, err.code);
+    res.status(500).json({ error: 'Failed to add feedback', detail: err.message });
+  }
+});
+
+// GET /api/bookings/:id/feedback  — get feedback for a booking
+router.get('/:id/feedback', authenticateToken, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      'SELECT * FROM session_feedback WHERE booking_id=$1',
+      [req.params.id]
+    );
+
+    if (rows.length) {
+      res.json(rows[0]);
+    } else {
+      res.json(null);
+    }
+  } catch (err) {
+    console.error('Get feedback error:', err.message, err.code);
+    res.status(500).json({ error: 'Failed to fetch feedback', detail: err.message });
+  }
+});
+
 module.exports = router;

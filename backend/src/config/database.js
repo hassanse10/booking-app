@@ -6,13 +6,20 @@
 
 const TABLES = [
   `CREATE TABLE IF NOT EXISTS students (
-    id            SERIAL       PRIMARY KEY,
-    first_name    VARCHAR(100) NOT NULL,
-    last_name     VARCHAR(100) NOT NULL,
-    email         VARCHAR(255) UNIQUE NOT NULL,
-    study_level   VARCHAR(100) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at    TIMESTAMPTZ  DEFAULT NOW()
+    id                      SERIAL       PRIMARY KEY,
+    first_name              VARCHAR(100) NOT NULL,
+    last_name               VARCHAR(100) NOT NULL,
+    email                   VARCHAR(255) UNIQUE NOT NULL,
+    study_level             VARCHAR(100) NOT NULL,
+    password_hash           VARCHAR(255) NOT NULL,
+    phone                   VARCHAR(20),
+    bio                     TEXT,
+    profile_picture_url     VARCHAR(255),
+    timezone                VARCHAR(50) DEFAULT 'UTC',
+    preferred_days          VARCHAR(100),
+    last_login              TIMESTAMPTZ,
+    profile_completed_at    TIMESTAMPTZ,
+    created_at              TIMESTAMPTZ DEFAULT NOW()
   )`,
   `CREATE TABLE IF NOT EXISTS availability (
     id           SERIAL  PRIMARY KEY,
@@ -23,21 +30,89 @@ const TABLES = [
     CONSTRAINT valid_time_range CHECK (start_time < end_time)
   )`,
   `CREATE TABLE IF NOT EXISTS bookings (
-    id          SERIAL  PRIMARY KEY,
-    student_id  INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
-    date        DATE    NOT NULL,
-    start_time  TIME    NOT NULL,
-    duration    INTEGER NOT NULL CHECK (duration IN (60, 90, 120)),
-    end_time    TIME    NOT NULL,
-    status      VARCHAR(20) NOT NULL DEFAULT 'confirmed'
-                  CHECK (status IN ('confirmed', 'canceled')),
-    meet_link   VARCHAR(255),
-    created_at  TIMESTAMPTZ DEFAULT NOW(),
-    updated_at  TIMESTAMPTZ DEFAULT NOW()
+    id                  SERIAL  PRIMARY KEY,
+    student_id          INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    date                DATE    NOT NULL,
+    start_time          TIME    NOT NULL,
+    duration            INTEGER NOT NULL CHECK (duration IN (60, 90, 120)),
+    end_time            TIME    NOT NULL,
+    status              VARCHAR(20) NOT NULL DEFAULT 'confirmed'
+                          CHECK (status IN ('confirmed', 'canceled')),
+    meet_link           VARCHAR(255),
+    teacher_notes       TEXT,
+    student_notes       TEXT,
+    student_rating      INTEGER CHECK (student_rating BETWEEN 1 AND 5),
+    teacher_rating      INTEGER CHECK (teacher_rating BETWEEN 1 AND 5),
+    student_feedback    TEXT,
+    teacher_feedback    TEXT,
+    amount_paid         DECIMAL(10, 2) DEFAULT 0,
+    payment_status      VARCHAR(20) DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'failed')),
+    invoice_id          INTEGER,
+    cancelled_reason    TEXT,
+    student_joined_at   TIMESTAMPTZ,
+    teacher_joined_at   TIMESTAMPTZ,
+    no_show             BOOLEAN DEFAULT FALSE,
+    created_at          TIMESTAMPTZ DEFAULT NOW(),
+    updated_at          TIMESTAMPTZ DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS invoices (
+    id              SERIAL PRIMARY KEY,
+    student_id      INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    booking_id      INTEGER REFERENCES bookings(id),
+    amount          DECIMAL(10, 2) NOT NULL,
+    description     TEXT,
+    issued_at       TIMESTAMPTZ DEFAULT NOW(),
+    due_at          TIMESTAMPTZ,
+    paid_at         TIMESTAMPTZ,
+    status          VARCHAR(20) DEFAULT 'draft' CHECK (status IN ('draft', 'sent', 'paid', 'overdue', 'cancelled')),
+    payment_method  VARCHAR(50),
+    created_at      TIMESTAMPTZ DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS notifications (
+    id              SERIAL PRIMARY KEY,
+    booking_id      INTEGER NOT NULL REFERENCES bookings(id) ON DELETE CASCADE,
+    student_id      INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    type            VARCHAR(50) NOT NULL CHECK (type IN ('24h_reminder', 'cancellation', 'rescheduled', 'no_show_alert', 'payment_reminder')),
+    recipient_email VARCHAR(255),
+    sent_at         TIMESTAMPTZ DEFAULT NOW(),
+    status          VARCHAR(20) DEFAULT 'sent' CHECK (status IN ('pending', 'sent', 'failed', 'bounced')),
+    error_message   TEXT
+  )`,
+  `CREATE TABLE IF NOT EXISTS recurring_bookings (
+    id              SERIAL PRIMARY KEY,
+    student_id      INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    frequency       VARCHAR(20) NOT NULL CHECK (frequency IN ('weekly', 'biweekly', 'monthly')),
+    start_date      DATE NOT NULL,
+    end_date        DATE,
+    day_of_week     INTEGER CHECK (day_of_week BETWEEN 0 AND 6),
+    time            TIME NOT NULL,
+    duration        INTEGER NOT NULL CHECK (duration IN (60, 90, 120)),
+    active          BOOLEAN DEFAULT TRUE,
+    discount_percent DECIMAL(5, 2) DEFAULT 0,
+    created_at      TIMESTAMPTZ DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS session_feedback (
+    id              SERIAL PRIMARY KEY,
+    booking_id      INTEGER UNIQUE NOT NULL REFERENCES bookings(id) ON DELETE CASCADE,
+    student_id      INTEGER NOT NULL REFERENCES students(id),
+    teacher_rating  INTEGER CHECK (teacher_rating BETWEEN 1 AND 5),
+    student_rating  INTEGER CHECK (student_rating BETWEEN 1 AND 5),
+    student_feedback TEXT,
+    teacher_feedback TEXT,
+    topics_covered  TEXT,
+    homework_assigned TEXT,
+    next_focus_areas TEXT,
+    created_at      TIMESTAMPTZ DEFAULT NOW()
   )`,
   `CREATE INDEX IF NOT EXISTS idx_bookings_date       ON bookings(date)`,
   `CREATE INDEX IF NOT EXISTS idx_bookings_student_id ON bookings(student_id)`,
   `CREATE INDEX IF NOT EXISTS idx_bookings_status     ON bookings(status)`,
+  `CREATE INDEX IF NOT EXISTS idx_invoices_student_id ON invoices(student_id)`,
+  `CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status)`,
+  `CREATE INDEX IF NOT EXISTS idx_notifications_booking_id ON notifications(booking_id)`,
+  `CREATE INDEX IF NOT EXISTS idx_notifications_student_id ON notifications(student_id)`,
+  `CREATE INDEX IF NOT EXISTS idx_recurring_bookings_student_id ON recurring_bookings(student_id)`,
+  `CREATE INDEX IF NOT EXISTS idx_session_feedback_booking_id ON session_feedback(booking_id)`,
 ];
 
 // ── Production: real PostgreSQL via pg ────────────────────────────────────────

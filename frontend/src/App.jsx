@@ -4,6 +4,7 @@ import Login            from './pages/Login';
 import Register         from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
+import StudentProfile   from './pages/StudentProfile';
 
 function Spinner() {
   return (
@@ -34,6 +35,9 @@ function AppRoutes() {
       <Route path="/register"  element={!user ? <Register /> : <Navigate to="/dashboard" replace />} />
       <Route path="/dashboard" element={
         <ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>
+      } />
+      <Route path="/profile"   element={
+        <ProtectedRoute role="student"><StudentProfile /></ProtectedRoute>
       } />
       <Route path="/teacher"   element={
         <ProtectedRoute role="teacher"><TeacherDashboard /></ProtectedRoute>

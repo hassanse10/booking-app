@@ -7,6 +7,8 @@ const bcrypt  = require('bcryptjs');
 const authRoutes         = require('./routes/auth');
 const bookingRoutes      = require('./routes/bookings');
 const availabilityRoutes = require('./routes/availability');
+const studentsRoutes     = require('./routes/students');
+const analyticsRoutes    = require('./routes/analytics');
 const pool               = require('./config/database');
 const { sendReminderEmails } = require('./services/emailService');
 
@@ -33,6 +35,8 @@ app.use(express.json());
 app.use('/api/auth',         authRoutes);
 app.use('/api/bookings',     bookingRoutes);
 app.use('/api/availability', availabilityRoutes);
+app.use('/api/students',     studentsRoutes);
+app.use('/api/analytics',    analyticsRoutes);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'OK' }));
 

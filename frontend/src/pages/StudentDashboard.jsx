@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import RatingModal from '../components/RatingModal';
+import { useNavigate } from 'react-router-dom';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const DAYS_SHORT = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
@@ -272,6 +274,7 @@ function ModifyModal({ booking, availableDays, onClose, onSaved }) {
 // ── Main Dashboard ────────────────────────────────────────────────────────────
 export default function StudentDashboard() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [tab, setTab]    = useState('book');
 
   // Book Session
@@ -288,6 +291,7 @@ export default function StudentDashboard() {
   const [bookings,        setBookings]        = useState([]);
   const [bookingsLoading, setBookingsLoading] = useState(false);
   const [modifyTarget,    setModifyTarget]    = useState(null);
+  const [ratingTarget,    setRatingTarget]    = useState(null);
 
   useEffect(() => {
     api.get('/availability')
@@ -351,6 +355,11 @@ export default function StudentDashboard() {
 
   const selectedDuration = getDuration(duration);
 
+  const isBookingPast = (booking) => {
+    const bookingEnd = new Date(`${booking.date}T${booking.end_time}`);
+    return bookingEnd < new Date();
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -366,7 +375,11 @@ export default function StudentDashboard() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate('/profile')}
+              className="px-3 py-1.5 text-sm text-indigo-600 hover:text-indigo-700 font-semibold hidden sm:inline-block">
+              👤 Mon Profil
+            </button>
             <div className="text-right hidden sm:block">
               <p className="font-semibold text-sm text-gray-900">
                 {user.first_name} {user.last_name}
@@ -597,11 +610,19 @@ export default function StudentDashboard() {
                     </div>
 
                     {b.status !== 'canceled' && (
-                      <div className="flex gap-2 shrink-0">
-                        <button onClick={() => setModifyTarget(b)}
-                          className="px-3 py-1.5 text-xs border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-50 transition font-semibold">
-                          Modifier
-                        </button>
+                      <div className="flex gap-2 shrink-0 flex-wrap justify-end">
+                        {isBookingPast(b) && !b.student_rating && (
+                          <button onClick={() => setRatingTarget(b)}
+                            className="px-3 py-1.5 text-xs border border-yellow-200 text-yellow-700 rounded-lg hover:bg-yellow-50 transition font-semibold">
+                            ⭐ Évaluer
+                          </button>
+                        )}
+                        {!isBookingPast(b) && (
+                          <button onClick={() => setModifyTarget(b)}
+                            className="px-3 py-1.5 text-xs border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-50 transition font-semibold">
+                            Modifier
+                          </button>
+                        )}
                         <button onClick={() => handleCancel(b.id)}
                           className="px-3 py-1.5 text-xs border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition font-semibold">
                           Annuler
@@ -623,6 +644,15 @@ export default function StudentDashboard() {
           availableDays={availableDays}
           onClose={() => setModifyTarget(null)}
           onSaved={() => { setModifyTarget(null); fetchBookings(); }}
+        />
+      )}
+
+      {/* Rating Modal */}
+      {ratingTarget && (
+        <RatingModal
+          booking={ratingTarget}
+          onClose={() => setRatingTarget(null)}
+          onRatingSubmitted={() => { setRatingTarget(null); fetchBookings(); }}
         />
       )}
     </div>
