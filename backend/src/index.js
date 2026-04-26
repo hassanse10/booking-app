@@ -9,6 +9,8 @@ const bookingRoutes      = require('./routes/bookings');
 const availabilityRoutes = require('./routes/availability');
 const studentsRoutes     = require('./routes/students');
 const analyticsRoutes    = require('./routes/analytics');
+const recurringRoutes    = require('./routes/recurring');
+const invoicesRoutes     = require('./routes/invoices');
 const pool               = require('./config/database');
 const {
   sendReminderEmails,
@@ -41,6 +43,8 @@ app.use('/api/bookings',     bookingRoutes);
 app.use('/api/availability', availabilityRoutes);
 app.use('/api/students',     studentsRoutes);
 app.use('/api/analytics',    analyticsRoutes);
+app.use('/api/recurring',    recurringRoutes);
+app.use('/api/invoices',     invoicesRoutes);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'OK' }));
 

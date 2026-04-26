@@ -46,6 +46,174 @@ function StatusBadge({ status }) {
   );
 }
 
+// ── WeekCalendar ─────────────────────────────────────────────────────────────
+function WeekCalendar({ bookings, onNotesClick }) {
+  const [weekOffset, setWeekOffset] = useState(0);
+
+  // Build the 7-day window
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((today.getDay() + 6) % 7) + weekOffset * 7);
+
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d;
+  });
+
+  const toDateStr = (d) => d.toISOString().split('T')[0];
+  const todayStr  = toDateStr(today);
+
+  // Hours to display: 7h–21h
+  const HOURS = Array.from({ length: 15 }, (_, i) => i + 7);
+
+  // Map bookings to { dateStr: [ booking, ... ] }
+  const byDate = {};
+  bookings.filter(b => b.status !== 'canceled').forEach(b => {
+    const ds = typeof b.date === 'string' && b.date.includes('T')
+      ? b.date.split('T')[0] : b.date;
+    if (!byDate[ds]) byDate[ds] = [];
+    byDate[ds].push(b);
+  });
+
+  const timeToY = (timeStr) => {
+    const [h, m] = timeStr.substring(0, 5).split(':').map(Number);
+    return ((h - 7) * 60 + m);
+  };
+
+  const TOTAL_MINS = 15 * 60; // 7h–22h range
+  const CELL_H     = 480;     // px height of the column
+
+  const durColor = (dur) => ({
+    60:  'bg-purple-500 hover:bg-purple-600',
+    90:  'bg-indigo-500 hover:bg-indigo-600',
+    120: 'bg-blue-500 hover:bg-blue-600',
+  })[dur] || 'bg-gray-500';
+
+  const monthLabel = monday.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+  return (
+    <div>
+      {/* Navigation */}
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="font-bold text-gray-900 capitalize">{monthLabel}</h2>
+          <p className="text-xs text-gray-400">Vue hebdomadaire</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => setWeekOffset(0)}
+            className="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-50 font-medium text-gray-600 transition">
+            Aujourd'hui
+          </button>
+          <button onClick={() => setWeekOffset(w => w - 1)}
+            className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 font-bold transition">
+            ‹
+          </button>
+          <button onClick={() => setWeekOffset(w => w + 1)}
+            className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 font-bold transition">
+            ›
+          </button>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="flex gap-4 mb-4 text-xs text-gray-500 flex-wrap">
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-purple-500 inline-block" /> 1h (15€)</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-indigo-500 inline-block" /> 1h30 (18€)</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-blue-500 inline-block" /> 2h (25€)</span>
+      </div>
+
+      {/* Grid */}
+      <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
+        <div className="min-w-[700px]">
+          {/* Day headers */}
+          <div className="grid grid-cols-8 border-b border-gray-100">
+            <div className="p-2" /> {/* time gutter */}
+            {days.map((d, i) => {
+              const ds  = toDateStr(d);
+              const cnt = (byDate[ds] || []).length;
+              return (
+                <div key={i}
+                  className={`p-3 text-center border-l border-gray-100 ${ds === todayStr ? 'bg-purple-50' : ''}`}>
+                  <p className="text-xs text-gray-400 font-medium">
+                    {d.toLocaleDateString('fr-FR', { weekday: 'short' }).toUpperCase()}
+                  </p>
+                  <p className={`text-lg font-bold ${ds === todayStr ? 'text-purple-600' : 'text-gray-800'}`}>
+                    {d.getDate()}
+                  </p>
+                  {cnt > 0 && (
+                    <span className="text-xs bg-purple-100 text-purple-700 rounded-full px-2 font-semibold">
+                      {cnt}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Time slots body */}
+          <div className="grid grid-cols-8" style={{ height: `${CELL_H}px` }}>
+            {/* Hour labels */}
+            <div className="relative border-r border-gray-100">
+              {HOURS.map(h => (
+                <div key={h}
+                  className="absolute w-full text-right pr-2 text-xs text-gray-300 font-medium"
+                  style={{ top: `${((h - 7) / 15) * 100}%` }}>
+                  {h}h
+                </div>
+              ))}
+            </div>
+
+            {/* Day columns */}
+            {days.map((d, di) => {
+              const ds       = toDateStr(d);
+              const dayBooks = byDate[ds] || [];
+              const isToday  = ds === todayStr;
+
+              return (
+                <div key={di} className={`relative border-l border-gray-100 ${isToday ? 'bg-purple-50/40' : ''}`}>
+                  {/* Hour grid lines */}
+                  {HOURS.map(h => (
+                    <div key={h}
+                      className="absolute w-full border-t border-gray-100"
+                      style={{ top: `${((h - 7) / 15) * 100}%` }} />
+                  ))}
+
+                  {/* Booking blocks */}
+                  {dayBooks.map(b => {
+                    const startMins = timeToY(b.start_time);
+                    const topPct    = (startMins / TOTAL_MINS) * 100;
+                    const heightPct = (b.duration / TOTAL_MINS) * 100;
+                    const price     = ({ 60: 15, 90: 18, 120: 25 })[b.duration] || '?';
+
+                    return (
+                      <button
+                        key={b.id}
+                        onClick={() => onNotesClick(b)}
+                        title={`${b.first_name} ${b.last_name} — ${b.start_time.substring(0,5)}`}
+                        className={`absolute left-0.5 right-0.5 rounded-lg p-1 text-white text-left transition cursor-pointer ${durColor(b.duration)}`}
+                        style={{ top: `${topPct}%`, height: `${Math.max(heightPct, 4)}%` }}
+                      >
+                        <p className="text-xs font-bold leading-tight truncate">
+                          {b.first_name} {b.last_name[0]}.
+                        </p>
+                        <p className="text-xs opacity-80 leading-tight">
+                          {b.start_time.substring(0, 5)} · {price}€
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── MiniCalendar (shared) ─────────────────────────────────────────────────────
 function MiniCalendar({ selected, onSelect, availableDays }) {
   const today = new Date();
@@ -389,9 +557,10 @@ export default function TeacherDashboard() {
 
       {/* Tabs */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
-        <div className="inline-flex gap-1 bg-gray-100 rounded-xl p-1">
+        <div className="inline-flex gap-1 bg-gray-100 rounded-xl p-1 flex-wrap">
           {[
             { id: 'bookings',     label: '📋 Réservations' },
+            { id: 'calendar',     label: '📅 Calendrier' },
             { id: 'availability', label: '⚙️ Disponibilités' },
           ].map((t) => (
             <button key={t.id} onClick={() => setTab(t.id)}
@@ -503,6 +672,13 @@ export default function TeacherDashboard() {
               ))}
             </div>
           )}
+        </main>
+      )}
+
+      {/* ── Calendar Tab ── */}
+      {tab === 'calendar' && (
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+          <WeekCalendar bookings={bookings} onNotesClick={setNotesTarget} />
         </main>
       )}
 

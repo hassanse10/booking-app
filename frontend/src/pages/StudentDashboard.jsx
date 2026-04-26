@@ -293,6 +293,10 @@ export default function StudentDashboard() {
   const [modifyTarget,    setModifyTarget]    = useState(null);
   const [ratingTarget,    setRatingTarget]    = useState(null);
 
+  // Waitlist
+  const [waitlistJoined,  setWaitlistJoined]  = useState(false);
+  const [waitlistLoading, setWaitlistLoading] = useState(false);
+
   useEffect(() => {
     api.get('/availability')
       .then((r) => setAvailableDays([...new Set(r.data.map((a) => a.day_of_week))]))
@@ -302,6 +306,7 @@ export default function StudentDashboard() {
   useEffect(() => {
     if (!selectedDate) { setSlots([]); setSelectedSlot(null); return; }
     setSlotsLoading(true);
+    setWaitlistJoined(false);
     api.get(`/availability/slots/${selectedDate}?duration=${duration}`)
       .then((r) => setSlots(r.data.slots || []))
       .catch(() => setSlots([]))
@@ -343,6 +348,21 @@ export default function StudentDashboard() {
     }
   };
 
+  const handleJoinWaitlist = async () => {
+    if (!selectedDate) return;
+    setWaitlistLoading(true);
+    try {
+      await api.post('/recurring/waitlist', {
+        date: selectedDate, start_time: '09:00', duration,
+      });
+      setWaitlistJoined(true);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Échec de l\'inscription à la liste d\'attente');
+    } finally {
+      setWaitlistLoading(false);
+    }
+  };
+
   const handleCancel = async (id) => {
     if (!confirm('Êtes-vous sûr de vouloir annuler cette séance ?')) return;
     try {
@@ -378,7 +398,11 @@ export default function StudentDashboard() {
           <div className="flex items-center gap-3">
             <button onClick={() => navigate('/profile')}
               className="px-3 py-1.5 text-sm text-indigo-600 hover:text-indigo-700 font-semibold hidden sm:inline-block">
-              👤 Mon Profil
+              👤 Profil
+            </button>
+            <button onClick={() => navigate('/invoices')}
+              className="px-3 py-1.5 text-sm text-indigo-600 hover:text-indigo-700 font-semibold hidden sm:inline-block">
+              🧾 Factures
             </button>
             <div className="text-right hidden sm:block">
               <p className="font-semibold text-sm text-gray-900">
@@ -522,6 +546,20 @@ export default function StudentDashboard() {
                   loading={slotsLoading}
                   selectedDate={selectedDate}
                 />
+                {selectedDate && !slotsLoading && slots.length === 0 && (
+                  <div className="text-center mt-3">
+                    {waitlistJoined ? (
+                      <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-green-800 text-sm font-medium">
+                        ✅ Vous êtes sur la liste d'attente pour ce jour !
+                      </div>
+                    ) : (
+                      <button onClick={handleJoinWaitlist} disabled={waitlistLoading}
+                        className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
+                        {waitlistLoading ? 'Inscription…' : '🔔 Rejoindre la liste d\'attente'}
+                      </button>
+                    )}
+                  </div>
+                )}
 
                 {selectedSlot && (
                   <div className="bg-white border-2 border-indigo-200 rounded-2xl p-5 shadow-sm">

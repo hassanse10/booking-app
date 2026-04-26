@@ -7,6 +7,7 @@ import TeacherDashboard  from './pages/TeacherDashboard';
 import StudentProfile    from './pages/StudentProfile';
 import TeacherAnalytics  from './pages/TeacherAnalytics';
 import StudentProgress   from './pages/StudentProgress';
+import InvoiceHistory    from './pages/InvoiceHistory';
 
 function Spinner() {
   return (
@@ -49,6 +50,9 @@ function AppRoutes() {
       } />
       <Route path="/analytics" element={
         <ProtectedRoute role="teacher"><TeacherAnalytics /></ProtectedRoute>
+      } />
+      <Route path="/invoices"  element={
+        <ProtectedRoute role="student"><InvoiceHistory /></ProtectedRoute>
       } />
     </Routes>
   );

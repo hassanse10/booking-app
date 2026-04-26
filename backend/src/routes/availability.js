@@ -79,6 +79,49 @@ router.get('/slots/:date', async (req, res) => {
   }
 });
 
+// GET /api/availability/suggest-times?student_id=X&duration=60  — authenticated
+router.get('/suggest-times', authenticateToken, async (req, res) => {
+  const studentId = parseInt(req.query.student_id) || req.user.id;
+  const duration  = parseInt(req.query.duration) || 60;
+
+  try {
+    // Analyse the student's past booking patterns
+    const { rows: history } = await pool.query(
+      `SELECT day_of_week, EXTRACT(HOUR FROM start_time)::int AS hour, COUNT(*) AS freq
+       FROM (
+         SELECT EXTRACT(DOW FROM date)::int AS day_of_week, start_time
+         FROM bookings
+         WHERE student_id = $1 AND status = 'confirmed'
+       ) t
+       GROUP BY day_of_week, hour
+       ORDER BY freq DESC
+       LIMIT 5`,
+      [studentId],
+    );
+
+    // Get available days
+    const { rows: avail } = await pool.query(
+      'SELECT DISTINCT day_of_week FROM availability ORDER BY day_of_week',
+    );
+    const availableDays = avail.map(r => r.day_of_week);
+
+    const suggestions = history
+      .filter(h => availableDays.includes(h.day_of_week))
+      .map(h => ({
+        dayOfWeek:  h.day_of_week,
+        hour:       h.hour,
+        time:       `${String(h.hour).padStart(2,'0')}:00`,
+        frequency:  parseInt(h.freq),
+        label:      ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][h.day_of_week],
+      }));
+
+    res.json({ suggestions, hasHistory: history.length > 0 });
+  } catch (err) {
+    console.error('Suggest times error:', err.message);
+    res.status(500).json({ error: 'Failed to generate suggestions', detail: err.message });
+  }
+});
+
 // POST /api/availability  — teacher only
 router.post('/', authenticateToken, requireTeacher, async (req, res) => {
   const { day_of_week, start_time, end_time } = req.body;
