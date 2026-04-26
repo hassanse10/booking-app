@@ -4,6 +4,35 @@
  *   - Local dev (no DATABASE_URL)    →  PGlite   (zero-install, file-based)
  */
 
+// ── Migrations: safely add columns/tables that may not exist on older DBs ─────
+// Each statement uses IF NOT EXISTS / DO NOTHING so reruns are safe.
+const MIGRATIONS = [
+  // students — new profile columns
+  `ALTER TABLE students ADD COLUMN IF NOT EXISTS phone               VARCHAR(20)`,
+  `ALTER TABLE students ADD COLUMN IF NOT EXISTS bio                 TEXT`,
+  `ALTER TABLE students ADD COLUMN IF NOT EXISTS profile_picture_url VARCHAR(255)`,
+  `ALTER TABLE students ADD COLUMN IF NOT EXISTS timezone            VARCHAR(50) DEFAULT 'UTC'`,
+  `ALTER TABLE students ADD COLUMN IF NOT EXISTS preferred_days      VARCHAR(100)`,
+  `ALTER TABLE students ADD COLUMN IF NOT EXISTS last_login          TIMESTAMPTZ`,
+  `ALTER TABLE students ADD COLUMN IF NOT EXISTS profile_completed_at TIMESTAMPTZ`,
+
+  // bookings — new tracking columns
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS teacher_notes     TEXT`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS student_notes     TEXT`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS student_rating    INTEGER`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS teacher_rating    INTEGER`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS student_feedback  TEXT`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS teacher_feedback  TEXT`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS amount_paid       DECIMAL(10,2) DEFAULT 0`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_status    VARCHAR(20) DEFAULT 'pending'`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS invoice_id        INTEGER`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS cancelled_reason  TEXT`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS student_joined_at TIMESTAMPTZ`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS teacher_joined_at TIMESTAMPTZ`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS no_show           BOOLEAN DEFAULT FALSE`,
+  `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS updated_at        TIMESTAMPTZ DEFAULT NOW()`,
+];
+
 const TABLES = [
   `CREATE TABLE IF NOT EXISTS students (
     id                      SERIAL       PRIMARY KEY,
@@ -139,11 +168,24 @@ if (process.env.DATABASE_URL) {
   // Run schema + seed on startup
   (async () => {
     try {
-      // Create tables one by one (pg doesn't support multi-statement queries)
+      // 1. Create new tables (IF NOT EXISTS — safe to rerun)
       for (const sql of TABLES) {
         await pool.query(sql);
       }
       console.log('Schema ready');
+
+      // 2. Apply migrations — add new columns to existing tables (IF NOT EXISTS — safe to rerun)
+      for (const sql of MIGRATIONS) {
+        try {
+          await pool.query(sql);
+        } catch (me) {
+          // Ignore "already exists" errors so a rerun never crashes startup
+          if (!me.message.includes('already exists')) {
+            console.warn('Migration warning:', me.message);
+          }
+        }
+      }
+      console.log('Migrations applied');
 
       // Seed availability if empty
       const { rows: avRows } = await pool.query('SELECT COUNT(*) AS c FROM availability');
