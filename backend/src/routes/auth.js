@@ -38,8 +38,8 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({ token, user: { ...student, role: 'student' } });
   } catch (err) {
-    console.error('Register error:', err);
-    res.status(500).json({ error: 'Registration failed' });
+    console.error('Register error:', err.message, err.code);
+    res.status(500).json({ error: 'Registration failed', detail: err.message });
   }
 });
 
@@ -76,8 +76,8 @@ router.post('/login', async (req, res) => {
       study_level: safe.study_level });
     res.json({ token, user: { ...safe, role: 'student' } });
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ error: 'Login failed' });
+    console.error('Login error:', err.message, err.code);
+    res.status(500).json({ error: 'Login failed', detail: err.message });
   }
 });
 
