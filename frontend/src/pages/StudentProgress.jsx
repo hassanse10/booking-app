@@ -17,16 +17,16 @@ const durLabel = (v) => {
 
 function MilestoneCard({ icon, text }) {
   return (
-    <div className="flex items-center gap-3 bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3">
+    <div className="flex items-center gap-3 bg-cyan-50 border border-cyan-100 rounded-xl px-4 py-3">
       <span className="text-2xl">{icon}</span>
-      <span className="font-semibold text-indigo-800 text-sm">{text}</span>
+      <span className="font-semibold text-cyan-800 text-sm">{text}</span>
     </div>
   );
 }
 
 function StatPill({ label, value, color = 'indigo' }) {
   const colors = {
-    indigo: 'bg-indigo-100 text-indigo-700',
+    indigo: 'bg-cyan-100 text-cyan-700',
     green:  'bg-emerald-100 text-emerald-700',
     amber:  'bg-amber-100 text-amber-700',
   };
@@ -53,18 +53,18 @@ export default function StudentProgress() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50">
         <div className="text-center">
           <p className="text-red-600 font-semibold mb-4">{error}</p>
-          <button onClick={() => navigate('/dashboard')} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm">
+          <button onClick={() => navigate('/dashboard')} className="px-4 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-lg text-sm">
             ← Retour
           </button>
         </div>
@@ -82,17 +82,17 @@ export default function StudentProgress() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-30">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
           <button onClick={() => navigate('/dashboard')}
-            className="p-2 hover:bg-gray-100 rounded-xl transition text-gray-500 font-bold text-lg">
+            className="p-2 hover:bg-slate-100 rounded-xl transition text-slate-500 font-bold text-lg">
             ←
           </button>
           <div>
-            <h1 className="font-bold text-gray-900">Ma Progression</h1>
-            <p className="text-xs text-gray-500">{user.first_name} {user.last_name} · {user.study_level}</p>
+            <h1 className="font-bold text-slate-900">Ma Progression</h1>
+            <p className="text-xs text-slate-500">{user.first_name} {user.last_name} · {user.study_level}</p>
           </div>
         </div>
       </header>
@@ -108,13 +108,13 @@ export default function StudentProgress() {
 
         {/* ── Next Milestone ─────────────────────────────────── */}
         {nextMilestone && (
-          <div className="bg-white rounded-2xl border border-gray-200 p-5">
+          <div className="bg-white rounded-2xl border border-slate-200 p-5">
             <p className="text-sm font-semibold text-gray-600 mb-3">
               Prochain objectif: <span className="text-indigo-600">{nextMilestone.label}</span>
             </p>
             <div className="w-full bg-gray-100 rounded-full h-3 mb-2">
               <div
-                className="bg-indigo-500 h-3 rounded-full transition-all"
+                className="bg-cyan-500 h-3 rounded-full transition-all"
                 style={{ width: `${Math.min(100, (nextMilestone.current / nextMilestone.target) * 100)}%` }}
               />
             </div>
@@ -126,7 +126,7 @@ export default function StudentProgress() {
 
         {/* ── Milestones ─────────────────────────────────────── */}
         {milestones.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6">
             <h2 className="text-lg font-bold text-gray-800 mb-4">🏅 Succès débloqués</h2>
             <div className="space-y-2">
               {milestones.map((m, i) => (
@@ -137,22 +137,22 @@ export default function StudentProgress() {
         )}
 
         {/* ── Session Timeline ───────────────────────────────── */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl border border-slate-200 p-6">
           <h2 className="text-lg font-bold text-gray-800 mb-5">📋 Historique des Séances</h2>
 
           {sessions.length === 0 ? (
             <div className="text-center py-10">
               <p className="text-5xl mb-3">📚</p>
-              <p className="text-gray-500 font-semibold">Aucune séance pour le moment</p>
+              <p className="text-slate-500 font-semibold">Aucune séance pour le moment</p>
               <button onClick={() => navigate('/dashboard')}
-                className="mt-4 px-5 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">
+                className="mt-4 px-5 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">
                 Réserver une séance
               </button>
             </div>
           ) : (
             <div className="relative">
               {/* Timeline line */}
-              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-indigo-100" />
+              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-cyan-100" />
 
               <div className="space-y-6 pl-10">
                 {sessions.map((s, i) => (
@@ -160,11 +160,11 @@ export default function StudentProgress() {
                     {/* Dot */}
                     <div className="absolute -left-[2.15rem] top-1 w-4 h-4 rounded-full border-2 border-indigo-400 bg-white" />
 
-                    <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
+                    <div className="bg-gray-50 rounded-xl border border-slate-200 p-4">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div>
-                          <p className="font-bold text-gray-900 capitalize text-sm">{fmtDate(s.date)}</p>
-                          <p className="text-xs text-gray-500">{durLabel(s.duration)}</p>
+                          <p className="font-bold text-slate-900 capitalize text-sm">{fmtDate(s.date)}</p>
+                          <p className="text-xs text-slate-500">{durLabel(s.duration)}</p>
                         </div>
                         {s.student_rating && (
                           <span className="text-amber-500 text-sm shrink-0">
@@ -174,21 +174,21 @@ export default function StudentProgress() {
                       </div>
 
                       {s.topics_covered && (
-                        <div className="mt-2 pt-2 border-t border-gray-200">
-                          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Sujets abordés</p>
+                        <div className="mt-2 pt-2 border-t border-slate-200">
+                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Sujets abordés</p>
                           <p className="text-sm text-gray-700">{s.topics_covered}</p>
                         </div>
                       )}
                       {s.homework_assigned && (
                         <div className="mt-2">
-                          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Devoir</p>
+                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Devoir</p>
                           <p className="text-sm text-gray-700">{s.homework_assigned}</p>
                         </div>
                       )}
                       {s.next_focus_areas && (
                         <div className="mt-2">
                           <p className="text-xs font-semibold text-indigo-500 uppercase tracking-wide mb-1">Prochaine séance</p>
-                          <p className="text-sm text-indigo-700 font-medium">{s.next_focus_areas}</p>
+                          <p className="text-sm text-cyan-700 font-medium">{s.next_focus_areas}</p>
                         </div>
                       )}
                     </div>

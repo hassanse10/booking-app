@@ -80,10 +80,10 @@ function WeekCalendar({ bookings, onNotesClick }) {
   };
 
   const durColor = (dur) => ({
-    60:  'bg-orange-400 hover:bg-orange-500',
-    90:  'bg-orange-500 hover:bg-orange-600',
-    120: 'bg-amber-500 hover:bg-amber-600',
-  })[dur] || 'bg-gray-500';
+    60:  'bg-cyan-400 hover:bg-cyan-500',
+    90:  'bg-cyan-500 hover:bg-cyan-600',
+    120: 'bg-blue-500 hover:bg-blue-600',
+  })[dur] || 'bg-slate-500';
 
   const monthLabel = monday.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
 
@@ -91,44 +91,44 @@ function WeekCalendar({ bookings, onNotesClick }) {
     <div>
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="font-bold text-gray-900 capitalize">{monthLabel}</h2>
-          <p className="text-xs text-gray-400">Vue hebdomadaire</p>
+          <h2 className="font-bold text-slate-900 capitalize">{monthLabel}</h2>
+          <p className="text-xs text-slate-400">Vue hebdomadaire</p>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setWeekOffset(0)}
-            className="px-3 py-1.5 text-xs border border-gray-200 bg-white rounded-lg hover:bg-gray-50 font-medium text-gray-600 transition shadow-sm">
+            className="px-3 py-1.5 text-xs border border-slate-200 bg-white rounded-lg hover:bg-slate-50 font-medium text-slate-600 transition shadow-sm">
             Aujourd'hui
           </button>
           <button onClick={() => setWeekOffset(w => w - 1)}
-            className="w-8 h-8 flex items-center justify-center border border-gray-200 bg-white rounded-lg hover:bg-gray-50 text-gray-600 font-bold transition shadow-sm">‹</button>
+            className="w-8 h-8 flex items-center justify-center border border-slate-200 bg-white rounded-lg hover:bg-slate-50 text-slate-600 font-bold transition shadow-sm">‹</button>
           <button onClick={() => setWeekOffset(w => w + 1)}
-            className="w-8 h-8 flex items-center justify-center border border-gray-200 bg-white rounded-lg hover:bg-gray-50 text-gray-600 font-bold transition shadow-sm">›</button>
+            className="w-8 h-8 flex items-center justify-center border border-slate-200 bg-white rounded-lg hover:bg-slate-50 text-slate-600 font-bold transition shadow-sm">›</button>
         </div>
       </div>
 
-      <div className="flex gap-3 mb-4 text-xs text-gray-500">
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-orange-400 inline-block" /> 1h (15€)</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-orange-500 inline-block" /> 1h30 (18€)</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-amber-500 inline-block" /> 2h (25€)</span>
+      <div className="flex gap-3 mb-4 text-xs text-slate-500">
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-cyan-400 inline-block" /> 1h (15€)</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-cyan-500 inline-block" /> 1h30 (18€)</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-blue-500 inline-block" /> 2h (25€)</span>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-3xl bg-white shadow-sm">
         <div className="min-w-[700px]">
-          <div className="grid grid-cols-8 border-b border-gray-100">
+          <div className="grid grid-cols-8 border-b border-slate-200">
             <div className="p-2" />
             {days.map((d, i) => {
               const ds  = toDateStr(d);
               const cnt = (byDate[ds] || []).length;
               return (
-                <div key={i} className={`p-3 text-center border-l border-gray-100 ${ds === todayStr ? 'bg-orange-50' : ''}`}>
-                  <p className="text-xs text-gray-400 font-medium">
+                <div key={i} className={`p-3 text-center border-l border-slate-200 ${ds === todayStr ? 'bg-cyan-50' : ''}`}>
+                  <p className="text-xs text-slate-400 font-medium">
                     {d.toLocaleDateString('fr-FR', { weekday: 'short' }).toUpperCase()}
                   </p>
-                  <p className={`text-lg font-bold ${ds === todayStr ? 'text-orange-500' : 'text-gray-800'}`}>
+                  <p className={`text-lg font-bold ${ds === todayStr ? 'text-cyan-500' : 'text-slate-800'}`}>
                     {d.getDate()}
                   </p>
                   {cnt > 0 && (
-                    <span className="text-xs bg-orange-100 text-orange-600 rounded-full px-2 font-semibold">{cnt}</span>
+                    <span className="text-xs bg-cyan-100 text-cyan-600 rounded-full px-2 font-semibold">{cnt}</span>
                   )}
                 </div>
               );
@@ -136,9 +136,9 @@ function WeekCalendar({ bookings, onNotesClick }) {
           </div>
 
           <div className="grid grid-cols-8" style={{ height: `${CELL_H}px` }}>
-            <div className="relative border-r border-gray-100">
+            <div className="relative border-r border-slate-200">
               {HOURS.map(h => (
-                <div key={h} className="absolute w-full text-right pr-2 text-xs text-gray-300 font-medium"
+                <div key={h} className="absolute w-full text-right pr-2 text-xs text-slate-300 font-medium"
                   style={{ top: `${((h - 7) / 15) * 100}%` }}>{h}h</div>
               ))}
             </div>
@@ -147,7 +147,7 @@ function WeekCalendar({ bookings, onNotesClick }) {
               const dayBooks = byDate[ds] || [];
               const isToday  = ds === todayStr;
               return (
-                <div key={di} className={`relative border-l border-gray-100 ${isToday ? 'bg-orange-50/30' : ''}`}>
+                <div key={di} className={`relative border-l border-slate-200 ${isToday ? 'bg-cyan-50/30' : ''}`}>
                   {HOURS.map(h => (
                     <div key={h} className="absolute w-full border-t border-gray-100"
                       style={{ top: `${((h - 7) / 15) * 100}%` }} />
@@ -190,17 +190,17 @@ function MiniCalendar({ selected, onSelect, availableDays }) {
   const todayStr = today.toISOString().split('T')[0];
 
   return (
-    <div className="bg-white rounded-2xl p-4 select-none shadow-sm">
+    <div className="bg-white rounded-3xl p-4 select-none shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <button onClick={() => setView(new Date(year, month - 1, 1))}
-          className="w-8 h-8 rounded-xl hover:bg-gray-100 transition text-gray-400 flex items-center justify-center font-bold text-lg">‹</button>
-        <span className="font-semibold text-gray-800 text-sm capitalize">{MONTHS[month]} {year}</span>
+          className="w-8 h-8 rounded-xl hover:bg-slate-100 transition text-slate-400 flex items-center justify-center font-bold text-lg">‹</button>
+        <span className="font-semibold text-slate-800 text-sm capitalize">{MONTHS[month]} {year}</span>
         <button onClick={() => setView(new Date(year, month + 1, 1))}
-          className="w-8 h-8 rounded-xl hover:bg-gray-100 transition text-gray-400 flex items-center justify-center font-bold text-lg">›</button>
+          className="w-8 h-8 rounded-xl hover:bg-slate-100 transition text-slate-400 flex items-center justify-center font-bold text-lg">›</button>
       </div>
       <div className="grid grid-cols-7 mb-1">
         {DAYS_SHORT.map((d) => (
-          <div key={d} className="text-center text-xs font-medium text-gray-300 py-1">{d}</div>
+          <div key={d} className="text-center text-xs font-medium text-slate-300 py-1">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-0.5">
@@ -216,10 +216,10 @@ function MiniCalendar({ selected, onSelect, availableDays }) {
             <button key={day} onClick={() => isAvail && onSelect(dateStr)} disabled={!isAvail}
               className={[
                 'aspect-square flex items-center justify-center text-xs rounded-xl transition font-medium',
-                isSel    ? 'bg-orange-500 text-white shadow-sm'                        : '',
-                !isSel && isAvail ? 'hover:bg-orange-50 text-gray-800 cursor-pointer'  : '',
-                !isAvail ? 'text-gray-200 cursor-not-allowed'                          : '',
-                isToday && !isSel ? 'ring-2 ring-orange-300 text-orange-500 font-bold' : '',
+                isSel    ? 'bg-cyan-400 text-white shadow-sm'                        : '',
+                !isSel && isAvail ? 'hover:bg-cyan-50 text-slate-800 cursor-pointer'  : '',
+                !isAvail ? 'text-slate-200 cursor-not-allowed'                          : '',
+                isToday && !isSel ? 'ring-2 ring-cyan-300 text-cyan-500 font-bold' : '',
               ].join(' ')}>
               {day}
             </button>
@@ -234,34 +234,34 @@ function MiniCalendar({ selected, onSelect, availableDays }) {
 function SlotGrid({ slots, selected, onSelect, loading, selectedDate }) {
   if (!selectedDate)
     return (
-      <div className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-gray-200 rounded-2xl text-gray-400 bg-gray-50">
+      <div className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400 bg-slate-50">
         <span className="text-3xl mb-1">📅</span>
         <p className="text-xs">Sélectionnez une date</p>
       </div>
     );
   if (loading)
     return (
-      <div className="flex items-center justify-center h-40 rounded-2xl bg-white shadow-sm">
-        <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500" />
+      <div className="flex items-center justify-center h-40 rounded-3xl bg-white shadow-sm">
+        <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-cyan-400" />
       </div>
     );
   if (!slots.length)
     return (
-      <div className="flex flex-col items-center justify-center h-40 rounded-2xl text-gray-400 bg-white shadow-sm">
+      <div className="flex flex-col items-center justify-center h-40 rounded-3xl text-slate-400 bg-white shadow-sm">
         <span className="text-3xl mb-1">😕</span>
         <p className="text-xs">Aucun créneau disponible</p>
       </div>
     );
   return (
-    <div className="bg-white rounded-2xl p-3 max-h-52 overflow-y-auto shadow-sm">
+    <div className="bg-white rounded-3xl p-3 max-h-52 overflow-y-auto shadow-sm">
       <div className="grid grid-cols-3 gap-1.5">
         {slots.map((slot) => (
           <button key={slot.start} onClick={() => onSelect(slot)}
             className={[
               'py-2 px-1 rounded-xl text-xs font-semibold transition',
               selected?.start === slot.start
-                ? 'bg-orange-500 text-white shadow-sm'
-                : 'bg-gray-50 text-gray-700 hover:bg-orange-50 hover:text-orange-600 border border-gray-200',
+                ? 'bg-cyan-400 text-white shadow-sm'
+                : 'bg-slate-50 text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 border border-slate-200',
             ].join(' ')}>
             {fmtTime(slot.start)}
           </button>
@@ -305,49 +305,49 @@ function ModifyModal({ booking, availableDays, onClose, onSaved }) {
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Modifier la réservation</h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <h2 className="text-lg font-bold text-slate-900">Modifier la réservation</h2>
+            <p className="text-xs text-slate-400 mt-0.5">
               {booking.first_name} {booking.last_name}
               {booking.study_level && ` · ${booking.study_level}`}
             </p>
           </div>
           <button onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition text-xl">✕</button>
+            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition text-xl">✕</button>
         </div>
         <div className="p-6">
-          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5 text-sm text-amber-800">
+          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mb-5 text-sm text-blue-800">
             <span>📌</span>
             Actuel : {fmtDateLong(booking.date)} à {fmtTime(booking.start_time)}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2 text-sm">Nouvelle date</h3>
+                <h3 className="font-semibold text-slate-800 mb-2 text-sm">Nouvelle date</h3>
                 <MiniCalendar selected={date} onSelect={setDate} availableDays={availableDays} />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2 text-sm">Durée & Tarif</h3>
+                <h3 className="font-semibold text-slate-800 mb-2 text-sm">Durée & Tarif</h3>
                 <div className="grid grid-cols-3 gap-2">
                   {DURATIONS.map((d) => (
                     <button key={d.value} onClick={() => { setDuration(d.value); setSlot(null); }}
                       className={`py-2.5 rounded-xl text-xs font-semibold transition flex flex-col items-center gap-0.5 ${
-                        duration === d.value ? 'bg-orange-500 text-white shadow-sm' : 'bg-gray-50 text-gray-700 border border-gray-200 hover:border-orange-300'
+                        duration === d.value ? 'bg-cyan-400 text-white shadow-sm' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-cyan-300'
                       }`}>
                       <span>{d.label}</span>
-                      <span className={`font-bold ${duration === d.value ? 'text-orange-100' : 'text-orange-500'}`}>{d.price}€</span>
+                      <span className={`font-bold ${duration === d.value ? 'text-cyan-100' : 'text-cyan-500'}`}>{d.price}€</span>
                     </button>
                   ))}
                 </div>
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2 text-sm">Nouveau créneau</h3>
+              <h3 className="font-semibold text-slate-800 mb-2 text-sm">Nouveau créneau</h3>
               <SlotGrid slots={slots} selected={slot} onSelect={setSlot} loading={loading} selectedDate={date} />
               {slot && date && (
-                <div className="mt-3 bg-orange-50 rounded-xl p-3 text-sm text-orange-800 space-y-0.5 border border-orange-100">
+                <div className="mt-3 bg-cyan-50 rounded-xl p-3 text-sm text-cyan-800 space-y-0.5 border border-cyan-100">
                   <p>📅 {fmtDateLong(date)}</p>
                   <p>⏰ {fmtTime(slot.start)} — {fmtTime(slot.end)}</p>
                 </div>
@@ -355,11 +355,11 @@ function ModifyModal({ booking, availableDays, onClose, onSaved }) {
             </div>
           </div>
         </div>
-        <div className="flex gap-3 justify-end px-6 py-4 border-t border-gray-100">
+        <div className="flex gap-3 justify-end px-6 py-4 border-t border-slate-200">
           <button onClick={onClose}
-            className="px-5 py-2 border border-gray-200 rounded-xl text-sm hover:bg-gray-50 transition font-medium">Annuler</button>
+            className="px-5 py-2 border border-slate-200 rounded-xl text-sm hover:bg-slate-50 transition font-medium">Annuler</button>
           <button onClick={handleSave} disabled={!slot || !date || saving}
-            className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-semibold disabled:opacity-50 transition shadow-sm">
+            className="px-5 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white rounded-xl text-sm font-semibold disabled:opacity-50 transition shadow-sm">
             {saving ? 'Enregistrement…' : 'Confirmer les modifications'}
           </button>
         </div>
@@ -373,7 +373,7 @@ function SideIcon({ icon, label, active, onClick }) {
   return (
     <button onClick={onClick} title={label}
       className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg transition ${
-        active ? 'bg-orange-500 shadow-sm' : 'hover:bg-gray-100 text-gray-400'
+        active ? 'bg-gradient-to-br from-cyan-400 to-blue-500 shadow-sm text-white' : 'hover:bg-slate-100 text-slate-400'
       }`}>
       {icon}
     </button>
@@ -496,12 +496,12 @@ export default function TeacherDashboard() {
   ];
 
   return (
-    <div className="flex h-screen bg-[#f2f1ef] overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
 
       {/* ── Sidebar ── */}
-      <aside className="hidden md:flex w-16 bg-white border-r border-gray-100 flex-col items-center py-5 gap-2 fixed h-full z-20 shadow-sm">
+      <aside className="hidden md:flex w-16 bg-white border-r border-slate-200 flex-col items-center py-5 gap-2 fixed h-full z-20 shadow-sm">
         {/* Logo */}
-        <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm mb-3">
+        <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-sm mb-3">
           <span className="text-lg">🎓</span>
         </div>
 
@@ -513,7 +513,7 @@ export default function TeacherDashboard() {
         </div>
 
         <button onClick={logout} title="Déconnexion"
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 transition text-lg">
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50 transition text-lg">
           ↩
         </button>
       </aside>
@@ -522,40 +522,40 @@ export default function TeacherDashboard() {
       <div className="flex-1 md:ml-16 flex flex-col overflow-hidden">
 
         {/* ── Top bar ── */}
-        <header className="bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between gap-4 shrink-0">
+        <header className="bg-white border-b border-slate-200 px-5 py-4 flex items-center justify-between gap-4 shrink-0">
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-gray-900 leading-tight">
+            <h1 className="text-xl font-bold text-slate-900 leading-tight">
               Bonjour, {user.first_name} 👋
             </h1>
-            <p className="text-xs text-gray-400 mt-0.5 hidden sm:block">
+            <p className="text-xs text-slate-400 mt-0.5 hidden sm:block">
               Suivez vos réservations et gérez votre agenda
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             {/* Pill nav */}
-            <nav className="hidden lg:flex bg-gray-100 rounded-full p-1 gap-1">
+            <nav className="hidden lg:flex bg-slate-100 rounded-full p-1 gap-1">
               {navItems.map(n => (
                 <button key={n.id} onClick={() => setTab(n.id)}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
-                    tab === n.id ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-800'
+                    tab === n.id ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'
                   }`}>
                   {n.label}
                 </button>
               ))}
               <button onClick={() => navigate('/analytics')}
-                className="px-4 py-1.5 rounded-full text-sm font-medium text-gray-500 hover:text-gray-800 transition">
+                className="px-4 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:text-slate-800 transition">
                 Analyses
               </button>
             </nav>
 
             {/* Bell */}
-            <button className="w-9 h-9 border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-50 transition text-base">
+            <button className="w-9 h-9 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-50 transition text-base">
               🔔
             </button>
 
             {/* Avatar */}
-            <div className="w-9 h-9 bg-gray-900 rounded-full flex items-center justify-center font-bold text-white text-sm">
+            <div className="w-9 h-9 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center font-bold text-white text-sm">
               {initials}
             </div>
           </div>
@@ -566,46 +566,46 @@ export default function TeacherDashboard() {
 
           {/* ── KPI Row ── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Confirmed — orange card */}
-            <div className="bg-orange-500 rounded-2xl p-4 text-white">
+            {/* Confirmed — cyan gradient card */}
+            <div className="bg-gradient-to-br from-cyan-400 to-blue-500 rounded-3xl p-4 text-white shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-sm font-semibold text-orange-100">Séances confirmées</p>
+                <p className="text-sm font-semibold text-cyan-100">Séances confirmées</p>
                 <span className="text-xl">✅</span>
               </div>
               <p className="text-3xl font-extrabold">{confirmed.length}</p>
-              <p className="text-xs text-orange-200 mt-1">
+              <p className="text-xs text-cyan-100 mt-1">
                 ↑ {todayBookings.length} aujourd'hui
               </p>
             </div>
 
             {/* Revenue */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="bg-white rounded-3xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-gray-400">Revenus estimés</p>
+                <p className="text-xs font-semibold text-slate-400">Revenus estimés</p>
                 <span className="text-xl">💶</span>
               </div>
-              <p className="text-3xl font-extrabold text-gray-900">{totalRevenue}<span className="text-lg text-gray-400">€</span></p>
-              <p className="text-xs text-gray-400 mt-1">sur {confirmed.length} séances</p>
+              <p className="text-3xl font-extrabold text-slate-900">{totalRevenue}<span className="text-lg text-slate-400">€</span></p>
+              <p className="text-xs text-slate-400 mt-1">sur {confirmed.length} séances</p>
             </div>
 
             {/* Avg rating */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="bg-white rounded-3xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-gray-400">Note moyenne</p>
+                <p className="text-xs font-semibold text-slate-400">Note moyenne</p>
                 <span className="text-xl">⭐</span>
               </div>
-              <p className="text-3xl font-extrabold text-gray-900">{avgRating ?? '—'}</p>
-              <p className="text-xs text-gray-400 mt-1">sur 5 étoiles</p>
+              <p className="text-3xl font-extrabold text-slate-900">{avgRating ?? '—'}</p>
+              <p className="text-xs text-slate-400 mt-1">sur 5 étoiles</p>
             </div>
 
             {/* Canceled */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="bg-white rounded-3xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-gray-400">Annulations</p>
+                <p className="text-xs font-semibold text-slate-400">Annulations</p>
                 <span className="text-xl">❌</span>
               </div>
-              <p className="text-3xl font-extrabold text-gray-900">{canceled.length}</p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-3xl font-extrabold text-slate-900">{canceled.length}</p>
+              <p className="text-xs text-slate-400 mt-1">
                 {bookings.length > 0 ? Math.round(canceled.length / bookings.length * 100) : 0}% du total
               </p>
             </div>
@@ -615,7 +615,7 @@ export default function TeacherDashboard() {
           {tab === 'bookings' && (
             <div>
               <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-                <h2 className="font-bold text-gray-900">Toutes les séances</h2>
+                <h2 className="font-bold text-slate-900">Toutes les séances</h2>
                 <div className="flex items-center gap-2 flex-wrap">
                   {[
                     { key: 'all', label: 'Tous' },
@@ -625,14 +625,14 @@ export default function TeacherDashboard() {
                     <button key={f.key} onClick={() => setStatusFilter(f.key)}
                       className={`px-3 py-1.5 text-xs rounded-xl font-semibold transition ${
                         statusFilter === f.key
-                          ? 'bg-gray-900 text-white shadow-sm'
-                          : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                          ? 'bg-slate-900 text-white shadow-sm'
+                          : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                       }`}>
                       {f.label}
                     </button>
                   ))}
                   <button onClick={fetchBookings}
-                    className="px-3 py-1.5 text-xs border border-gray-200 rounded-xl hover:bg-gray-50 transition text-gray-500 bg-white font-medium shadow-sm flex items-center gap-1">
+                    className="px-3 py-1.5 text-xs border border-slate-200 rounded-xl hover:bg-slate-50 transition text-slate-500 bg-white font-medium shadow-sm flex items-center gap-1">
                     ↻ Actualiser
                   </button>
                 </div>
@@ -640,17 +640,17 @@ export default function TeacherDashboard() {
 
               {bookingsLoading ? (
                 <div className="flex items-center justify-center py-16">
-                  <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500" />
+                  <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400" />
                 </div>
               ) : filtered.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-gray-400 bg-white rounded-2xl shadow-sm">
+                <div className="flex flex-col items-center justify-center py-16 text-slate-400 bg-white rounded-3xl shadow-sm">
                   <span className="text-4xl mb-3">📋</span>
                   <p className="font-medium">Aucune réservation trouvée</p>
                 </div>
               ) : (
-                <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
                   {/* Table header */}
-                  <div className="grid grid-cols-12 gap-4 px-5 py-3 border-b border-gray-100 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <div className="grid grid-cols-12 gap-4 px-5 py-3 border-b border-slate-200 text-xs font-semibold text-slate-400 uppercase tracking-wide">
                     <div className="col-span-4">Élève</div>
                     <div className="col-span-3 hidden sm:block">Date & Heure</div>
                     <div className="col-span-2 hidden md:block">Tarif</div>
@@ -661,29 +661,29 @@ export default function TeacherDashboard() {
                   {filtered.map((b, idx) => (
                     <div key={b.id}
                       className={`grid grid-cols-12 gap-4 px-5 py-4 items-center transition ${
-                        idx !== filtered.length - 1 ? 'border-b border-gray-50' : ''
-                      } ${b.status === 'canceled' ? 'opacity-50' : 'hover:bg-gray-50/50'}`}>
+                        idx !== filtered.length - 1 ? 'border-b border-slate-100' : ''
+                      } ${b.status === 'canceled' ? 'opacity-50' : 'hover:bg-slate-50/50'}`}>
 
                       {/* Student */}
                       <div className="col-span-4">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center font-bold text-orange-600 text-xs shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center font-bold text-cyan-600 text-xs shrink-0">
                             {b.first_name?.[0]}{b.last_name?.[0]}
                           </div>
                           <div className="min-w-0">
-                            <p className="font-semibold text-gray-900 text-sm truncate">{b.first_name} {b.last_name}</p>
-                            <p className="text-xs text-gray-400 truncate">{b.email}</p>
+                            <p className="font-semibold text-slate-900 text-sm truncate">{b.first_name} {b.last_name}</p>
+                            <p className="text-xs text-slate-400 truncate">{b.email}</p>
                           </div>
                         </div>
                       </div>
 
                       {/* Date */}
                       <div className="col-span-3 hidden sm:block">
-                        <p className="font-medium text-gray-800 text-sm capitalize">{fmtDate(b.date)}</p>
-                        <p className="text-xs text-gray-400">{fmtTime(b.start_time)} — {fmtTime(b.end_time)} · {durLabel(b.duration)}</p>
+                        <p className="font-medium text-slate-800 text-sm capitalize">{fmtDate(b.date)}</p>
+                        <p className="text-xs text-slate-400">{fmtTime(b.start_time)} — {fmtTime(b.end_time)} · {durLabel(b.duration)}</p>
                         {b.meet_link && b.status !== 'canceled' && (
                           <a href={b.meet_link} target="_blank" rel="noopener noreferrer"
-                            className="text-xs text-orange-500 hover:underline font-semibold mt-0.5 inline-block">
+                            className="text-xs text-cyan-500 hover:underline font-semibold mt-0.5 inline-block">
                             🔗 Rejoindre
                           </a>
                         )}
@@ -691,7 +691,7 @@ export default function TeacherDashboard() {
 
                       {/* Price */}
                       <div className="col-span-2 hidden md:block">
-                        <span className="font-bold text-gray-900">{durPrice(b.duration)}€</span>
+                        <span className="font-bold text-slate-900">{durPrice(b.duration)}€</span>
                         {b.student_rating > 0 && (
                           <p className="text-amber-400 text-xs mt-0.5">{'★'.repeat(b.student_rating)}{'☆'.repeat(5 - b.student_rating)}</p>
                         )}
@@ -707,11 +707,11 @@ export default function TeacherDashboard() {
                         {b.status === 'confirmed' && (
                           <>
                             <button onClick={() => setNotesTarget(b)}
-                              className="px-2.5 py-1 text-xs border border-emerald-200 text-emerald-600 rounded-lg hover:bg-emerald-50 transition font-semibold">
+                              className="px-2.5 py-1 text-xs border border-teal-200 text-teal-600 rounded-lg hover:bg-teal-50 transition font-semibold">
                               📝
                             </button>
                             <button onClick={() => setModifyTarget(b)}
-                              className="px-2.5 py-1 text-xs border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition font-semibold">
+                              className="px-2.5 py-1 text-xs border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition font-semibold">
                               ✏️
                             </button>
                             <button onClick={() => handleCancelBooking(b.id)}
@@ -737,47 +737,47 @@ export default function TeacherDashboard() {
           {tab === 'availability' && (
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-gray-900">Disponibilités hebdomadaires</h2>
+                <h2 className="font-bold text-slate-900">Disponibilités hebdomadaires</h2>
                 <button onClick={() => setShowForm(!showForm)}
                   className={`px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm ${
-                    showForm ? 'border border-gray-200 text-gray-600 hover:bg-gray-50 bg-white' : 'bg-orange-500 hover:bg-orange-600 text-white'
+                    showForm ? 'border border-slate-200 text-slate-600 hover:bg-slate-50 bg-white' : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white'
                   }`}>
                   {showForm ? 'Annuler' : '+ Ajouter un créneau'}
                 </button>
               </div>
 
               {showForm && (
-                <div className="bg-white rounded-2xl p-5 mb-5 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-4">Nouveau créneau</h3>
+                <div className="bg-white rounded-3xl p-5 mb-5 shadow-sm">
+                  <h3 className="font-semibold text-slate-900 mb-4">Nouveau créneau</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 mb-1.5">Jour de la semaine</label>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Jour de la semaine</label>
                       <select value={form.day_of_week}
                         onChange={(e) => setForm({ ...form, day_of_week: parseInt(e.target.value) })}
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none text-sm bg-white">
+                        className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-400 outline-none text-sm bg-white">
                         {DAYS.map((d, i) => <option key={i} value={i}>{d}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 mb-1.5">Heure de début</label>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Heure de début</label>
                       <input type="time" value={form.start_time}
                         onChange={(e) => setForm({ ...form, start_time: e.target.value })}
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none text-sm" />
+                        className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-400 outline-none text-sm" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 mb-1.5">Heure de fin</label>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Heure de fin</label>
                       <input type="time" value={form.end_time}
                         onChange={(e) => setForm({ ...form, end_time: e.target.value })}
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 outline-none text-sm" />
+                        className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-400 outline-none text-sm" />
                     </div>
                   </div>
                   <div className="flex gap-3 mt-4">
                     <button onClick={handleAddSlot} disabled={saving}
-                      className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-semibold disabled:opacity-60 transition shadow-sm">
+                      className="px-5 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white rounded-xl text-sm font-semibold disabled:opacity-60 transition shadow-sm">
                       {saving ? 'Ajout en cours…' : 'Ajouter'}
                     </button>
                     <button onClick={() => setShowForm(false)}
-                      className="px-5 py-2 border border-gray-200 rounded-xl text-sm hover:bg-gray-50 transition font-medium">
+                      className="px-5 py-2 border border-slate-200 rounded-xl text-sm hover:bg-slate-50 transition font-medium">
                       Annuler
                     </button>
                   </div>
@@ -786,24 +786,24 @@ export default function TeacherDashboard() {
 
               {availLoading ? (
                 <div className="flex items-center justify-center py-12">
-                  <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500" />
+                  <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400" />
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
                   {DAYS.map((day, i) => (
-                    <div key={i} className="bg-white rounded-2xl p-3 shadow-sm">
+                    <div key={i} className="bg-white rounded-3xl p-3 shadow-sm">
                       <div className="mb-2">
-                        <p className="font-bold text-gray-800 text-sm">{DAYS_SHORT[i]}</p>
-                        <p className="text-xs text-gray-400">{day}</p>
+                        <p className="font-bold text-slate-800 text-sm">{DAYS_SHORT[i]}</p>
+                        <p className="text-xs text-slate-400">{day}</p>
                       </div>
                       {availByDay[i].length === 0 ? (
-                        <p className="text-xs text-gray-300 italic">Aucun</p>
+                        <p className="text-xs text-slate-300 italic">Aucun</p>
                       ) : (
                         <div className="space-y-1.5">
                           {availByDay[i].map((slot) => (
                             <div key={slot.id}
-                              className="flex items-center justify-between bg-orange-50 rounded-xl px-2 py-1.5 border border-orange-100">
-                              <span className="text-xs font-semibold text-orange-700">
+                              className="flex items-center justify-between bg-cyan-50 rounded-xl px-2 py-1.5 border border-cyan-100">
+                              <span className="text-xs font-semibold text-cyan-700">
                                 {slot.start_time.substring(0,5)}–{slot.end_time.substring(0,5)}
                               </span>
                               <button onClick={() => handleDeleteSlot(slot.id)}
@@ -817,7 +817,7 @@ export default function TeacherDashboard() {
                 </div>
               )}
 
-              <p className="text-xs text-gray-400 mt-4 text-center">
+              <p className="text-xs text-slate-400 mt-4 text-center">
                 Les disponibilités définissent les jours et horaires où les élèves peuvent réserver des séances.
               </p>
             </div>

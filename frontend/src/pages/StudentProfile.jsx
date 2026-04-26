@@ -75,9 +75,9 @@ const StudentProfile = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50">
         <div className="animate-spin">
-          <div className="h-12 w-12 border-4 border-blue-200 border-t-blue-600 rounded-full"></div>
+          <div className="h-12 w-12 border-4 border-cyan-200 border-t-cyan-400 rounded-full"></div>
         </div>
       </div>
     );
@@ -87,20 +87,20 @@ const StudentProfile = () => {
   const circumference = 2 * Math.PI * 45;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Mon Profil</h1>
-          <p className="text-gray-600">Complétez votre profil pour déverrouiller des fonctionnalités</p>
+        <div className="bg-white rounded-3xl shadow-sm p-8 mb-6">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Mon Profil</h1>
+          <p className="text-slate-500">Complétez votre profil pour déverrouiller des fonctionnalités</p>
         </div>
 
         {/* Completion Progress */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+        <div className="bg-white rounded-3xl shadow-sm p-8 mb-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-bold text-gray-800 mb-2">Complétude du Profil</h2>
-              <p className="text-gray-600">
+              <h2 className="text-xl font-bold text-slate-900 mb-2">Complétude du Profil</h2>
+              <p className="text-slate-500">
                 {completionPercentage === 100
                   ? '✨ Votre profil est complet!'
                   : `Remplissez ${100 - completionPercentage}% de plus pour débloquer les récompenses`}
@@ -113,7 +113,7 @@ const StudentProfile = () => {
                   cy="64"
                   r="45"
                   fill="none"
-                  stroke="#e5e7eb"
+                  stroke="#e2e8f0"
                   strokeWidth="4"
                 />
                 <circle
@@ -121,7 +121,7 @@ const StudentProfile = () => {
                   cy="64"
                   r="45"
                   fill="none"
-                  stroke="#4f46e5"
+                  stroke="#06b6d4"
                   strokeWidth="4"
                   strokeDasharray={circumference}
                   strokeDashoffset={circumference - (completionPercentage / 100) * circumference}
@@ -130,22 +130,22 @@ const StudentProfile = () => {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold text-indigo-600">{completionPercentage}%</span>
+                <span className="text-2xl font-bold text-cyan-500">{completionPercentage}%</span>
               </div>
             </div>
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-slate-200 rounded-full h-2">
             <div
-              className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full transition-all duration-300"
               style={{ width: `${completionPercentage}%` }}
             ></div>
           </div>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-white rounded-3xl shadow-sm p-8">
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
               {error}
@@ -159,56 +159,56 @@ const StudentProfile = () => {
 
           <form onSubmit={handleSave} className="space-y-6">
             {/* Profile Info (Read-only) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-200">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
                   Prénom
                 </label>
                 <input
                   type="text"
                   value={profile?.first_name || ''}
                   disabled
-                  className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-600"
+                  className="w-full px-4 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-600"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
                   Nom
                 </label>
                 <input
                   type="text"
                   value={profile?.last_name || ''}
                   disabled
-                  className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-600"
+                  className="w-full px-4 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-600"
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
                   Email
                 </label>
                 <input
                   type="email"
                   value={profile?.email || ''}
                   disabled
-                  className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-600"
+                  className="w-full px-4 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-600"
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
                   Niveau Scolaire
                 </label>
                 <input
                   type="text"
                   value={profile?.study_level || ''}
                   disabled
-                  className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-600"
+                  className="w-full px-4 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-600"
                 />
               </div>
             </div>
 
             {/* Optional Profile Fields */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Numéro de Téléphone
               </label>
               <input
@@ -217,12 +217,12 @@ const StudentProfile = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+33 6 12 34 56 78"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Bio / À propos
               </label>
               <textarea
@@ -231,12 +231,12 @@ const StudentProfile = () => {
                 onChange={handleChange}
                 placeholder="Parlez un peu de vous..."
                 rows="4"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none"
               ></textarea>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 URL Photo de Profil
               </label>
               <input
@@ -245,14 +245,14 @@ const StudentProfile = () => {
                 value={formData.profile_picture_url}
                 onChange={handleChange}
                 placeholder="https://example.com/photo.jpg"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none"
               />
               {formData.profile_picture_url && (
                 <div className="mt-3">
                   <img
                     src={formData.profile_picture_url}
                     alt="Aperçu"
-                    className="h-32 w-32 object-cover rounded-lg border-2 border-indigo-200"
+                    className="h-32 w-32 object-cover rounded-lg border-2 border-cyan-200"
                     onError={(e) => {
                       e.target.style.display = 'none';
                     }}
@@ -262,14 +262,14 @@ const StudentProfile = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Fuseau Horaire
               </label>
               <select
                 name="timezone"
                 value={formData.timezone}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz} value={tz}>{tz}</option>
@@ -278,7 +278,7 @@ const StudentProfile = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Jours Préférés
               </label>
               <input
@@ -287,14 +287,14 @@ const StudentProfile = () => {
                 value={formData.preferred_days}
                 onChange={handleChange}
                 placeholder="Lun, Mer, Ven (séparés par des virgules)"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-transparent outline-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={saving}
-              className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white py-3 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
             >
               {saving ? 'Enregistrement...' : 'Enregistrer les Modifications'}
             </button>
@@ -302,9 +302,9 @@ const StudentProfile = () => {
         </div>
 
         {/* Tips */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-6">
-          <h3 className="font-semibold text-blue-900 mb-3">💡 Conseils</h3>
-          <ul className="text-blue-800 space-y-2 text-sm">
+        <div className="bg-cyan-50 border border-cyan-200 rounded-3xl p-6 mt-6">
+          <h3 className="font-semibold text-cyan-900 mb-3">💡 Conseils</h3>
+          <ul className="text-cyan-800 space-y-2 text-sm">
             <li>✓ Remplissez tous les champs pour déverrouiller les récompenses</li>
             <li>✓ Utilisez une photo professionnelle pour votre profil</li>
             <li>✓ Indiquez votre fuseau horaire pour des rappels précis</li>

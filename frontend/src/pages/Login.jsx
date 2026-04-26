@@ -29,33 +29,33 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
+        {/* Logo & Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl shadow-lg mb-4">
-            <span className="text-3xl">📚</span>
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-3xl mb-4 shadow-lg">
+            <span className="text-4xl">📚</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Bon retour !</h1>
-          <p className="text-gray-500 mt-1">Connectez-vous à votre espace</p>
+          <h1 className="text-3xl font-bold text-slate-900">Bon retour!</h1>
+          <p className="text-slate-500 mt-2">Connectez-vous à votre espace de cours</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white rounded-3xl p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm font-medium">
                 <span>⚠️</span> {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Adresse e-mail</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm"
+                className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm"
                 placeholder="vous@exemple.com"
                 required
                 autoComplete="email"
@@ -63,12 +63,12 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Mot de passe</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Mot de passe</label>
               <input
                 type="password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm"
+                className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm"
                 placeholder="••••••••"
                 required
                 autoComplete="current-password"
@@ -78,22 +78,27 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold rounded-xl transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+              className="w-full py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-semibold rounded-2xl transition-all disabled:opacity-60 disabled:cursor-not-allowed text-sm shadow-sm"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                  <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
                   Connexion…
                 </span>
               ) : 'Se connecter'}
             </button>
           </form>
+
+          {/* Demo info */}
+          <div className="mt-6 p-3 bg-blue-50 rounded-2xl border border-blue-100">
+            <p className="text-xs text-blue-700 font-medium">📝 Démo: sara.dupont@cours.fr / demo1234</p>
+          </div>
         </div>
 
-        <p className="text-center text-gray-500 mt-6 text-sm">
-          Pas encore de compte ?{' '}
-          <Link to="/register" className="text-indigo-600 hover:text-indigo-700 font-medium">
-            S'inscrire en tant qu'élève
+        <p className="text-center text-slate-600 mt-6 text-sm">
+          Pas encore de compte?{' '}
+          <Link to="/register" className="text-cyan-600 hover:text-cyan-700 font-semibold">
+            S'inscrire
           </Link>
         </p>
       </div>

@@ -50,33 +50,33 @@ export default function Register() {
 
   const field = (label, name, type = 'text', placeholder = '') => (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
+      <label className="block text-sm font-semibold text-slate-700 mb-2">{label}</label>
       <input
         type={type}
         value={form[name]}
         onChange={set(name)}
         placeholder={placeholder}
         required
-        className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm"
+        className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm"
       />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl shadow-lg mb-4">
-            <span className="text-3xl">🎓</span>
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-pink-400 to-rose-500 rounded-3xl mb-4 shadow-lg">
+            <span className="text-4xl">🎓</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Créer un compte</h1>
-          <p className="text-gray-500 mt-1">Inscrivez-vous pour réserver des séances</p>
+          <h1 className="text-3xl font-bold text-slate-900">Créer un compte</h1>
+          <p className="text-slate-500 mt-2">Inscrivez-vous pour réserver vos séances</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white rounded-3xl p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm font-medium">
                 <span>⚠️</span> {error}
               </div>
             )}
@@ -86,15 +86,15 @@ export default function Register() {
               {field('Nom',    'last_name',  'text', 'Nom de famille')}
             </div>
 
-            {field('Adresse e-mail', 'email', 'email', 'vous@exemple.com')}
+            {field('Email', 'email', 'email', 'vous@exemple.com')}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Niveau scolaire</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Niveau scolaire</label>
               <select
                 value={form.study_level}
                 onChange={set('study_level')}
                 required
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm bg-white"
+                className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm bg-white"
               >
                 <option value="">Sélectionnez votre niveau…</option>
                 {NIVEAUX.map((n) => <option key={n} value={n}>{n}</option>)}
@@ -107,21 +107,21 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors disabled:opacity-60 text-sm mt-2"
+              className="w-full py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-semibold rounded-2xl transition-all disabled:opacity-60 disabled:cursor-not-allowed text-sm mt-2 shadow-sm"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                  Création du compte…
+                  <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                  Création…
                 </span>
               ) : 'Créer mon compte'}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-gray-500 mt-6 text-sm">
-          Vous avez déjà un compte ?{' '}
-          <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">Se connecter</Link>
+        <p className="text-center text-slate-600 mt-6 text-sm">
+          Vous avez déjà un compte?{' '}
+          <Link to="/login" className="text-cyan-600 hover:text-cyan-700 font-semibold">Se connecter</Link>
         </p>
       </div>
     </div>
