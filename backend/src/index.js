@@ -2,10 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
 const cron    = require('node-cron');
+const bcrypt  = require('bcryptjs');
 
 const authRoutes         = require('./routes/auth');
 const bookingRoutes      = require('./routes/bookings');
 const availabilityRoutes = require('./routes/availability');
+const pool               = require('./config/database');
 const { sendReminderEmails } = require('./services/emailService');
 
 const app  = express();
@@ -19,11 +21,8 @@ const allowedOrigins = rawOrigins
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile, Postman, curl)
     if (!origin) return callback(null, true);
-    // If no explicit allowlist, allow everything (dev/demo mode)
     if (allowedOrigins.length === 0) return callback(null, true);
-    // Otherwise check the list
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
@@ -37,7 +36,47 @@ app.use('/api/availability', availabilityRoutes);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'OK' }));
 
-// Reminder emails every hour (bonus feature)
+// ── Demo account keep-alive ───────────────────────────────────────────────────
+// Neon free tier can wipe data after inactivity. This re-seeds the demo
+// student and availability slots every 30 minutes automatically.
+const seedDemo = async () => {
+  try {
+    // Re-seed demo student if missing
+    const { rows } = await pool.query(
+      'SELECT id FROM students WHERE email = $1',
+      ['sara.dupont@cours.fr'],
+    );
+    if (!rows.length) {
+      const hash = await bcrypt.hash('demo1234', 10);
+      await pool.query(
+        `INSERT INTO students (first_name, last_name, email, study_level, password_hash)
+         VALUES ($1,$2,$3,$4,$5) ON CONFLICT (email) DO NOTHING`,
+        ['Sara', 'Dupont', 'sara.dupont@cours.fr', 'Terminale', hash],
+      );
+      console.log('Demo student re-seeded');
+    }
+
+    // Re-seed availability if missing
+    const { rows: av } = await pool.query('SELECT COUNT(*) AS c FROM availability');
+    if (parseInt(av[0].c) === 0) {
+      await pool.query(`
+        INSERT INTO availability (day_of_week, start_time, end_time) VALUES
+          (1,'09:00','18:00'),(2,'09:00','18:00'),(3,'09:00','18:00'),
+          (4,'09:00','18:00'),(5,'09:00','17:00'),(6,'10:00','14:00')
+        ON CONFLICT DO NOTHING
+      `);
+      console.log('Availability re-seeded');
+    }
+  } catch (e) {
+    console.error('Seed error:', e.message);
+  }
+};
+
+// Run seed on startup and every 30 minutes
+seedDemo();
+cron.schedule('*/30 * * * *', seedDemo);
+
+// Reminder emails every hour
 cron.schedule('0 * * * *', () => {
   sendReminderEmails().catch((err) => console.error('Reminder cron error:', err));
 });
