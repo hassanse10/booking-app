@@ -99,9 +99,9 @@ router.get('/engagement', async (req, res) => {
               COALESCE(AVG(sf.teacher_rating), 0) as avg_rating,
               COUNT(sf.id) as feedback_count
        FROM students s
-       LEFT JOIN session_feedback sf ON s.id = sf.student_id
-       WHERE sf.teacher_rating IS NOT NULL
+       LEFT JOIN session_feedback sf ON s.id = sf.student_id AND sf.teacher_rating IS NOT NULL
        GROUP BY s.id
+       HAVING COUNT(sf.id) > 0
        ORDER BY avg_rating DESC
        LIMIT 5`
     );
@@ -145,12 +145,12 @@ router.get('/peak-hours', async (req, res) => {
   try {
     const { rows } = await pool.query(
       `SELECT
-              day_of_week,
+              EXTRACT(DOW FROM date)::int as day_of_week,
               EXTRACT(HOUR FROM start_time)::int as hour,
               COUNT(*) as bookings
        FROM bookings
        WHERE status = 'confirmed'
-       GROUP BY day_of_week, hour
+       GROUP BY EXTRACT(DOW FROM date)::int, EXTRACT(HOUR FROM start_time)::int
        ORDER BY day_of_week, hour`
     );
 
