@@ -5,8 +5,10 @@ const pool     = require('../config/database');
 
 const router = express.Router();
 
+const JWT_SECRET = process.env.JWT_SECRET || 'teacher_booking_jwt_secret_key_2024_abc123xyz';
+
 const signToken = (payload) =>
-  jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+  jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
