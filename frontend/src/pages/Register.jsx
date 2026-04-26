@@ -32,7 +32,17 @@ export default function Register() {
       login(data.token, data.user);
       navigate('/dashboard', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || 'Échec de l\'inscription');
+      if (!err.response) {
+        setError('Impossible de contacter le serveur. Vérifiez votre connexion.');
+      } else {
+        const msg = err.response?.data?.error || '';
+        if (msg.includes('already registered') || msg.includes('already exists'))
+          setError('Cette adresse e-mail est déjà utilisée.');
+        else if (msg.includes('required'))
+          setError('Tous les champs sont obligatoires.');
+        else
+          setError(msg || 'Échec de l\'inscription. Veuillez réessayer.');
+      }
     } finally {
       setLoading(false);
     }

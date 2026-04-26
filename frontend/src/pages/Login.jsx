@@ -19,7 +19,10 @@ export default function Login() {
       login(data.token, data.user);
       navigate(data.user.role === 'teacher' ? '/teacher' : '/dashboard', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || 'Identifiants incorrects. Veuillez réessayer.');
+      if (!err.response)
+        setError('Impossible de contacter le serveur. Vérifiez votre connexion.');
+      else
+        setError('Identifiants incorrects. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }
