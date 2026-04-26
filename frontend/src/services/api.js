@@ -1,8 +1,12 @@
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
-});
+// Handle VITE_API_URL with or without /api suffix, or fall back to Vercel proxy
+const rawBase = import.meta.env.VITE_API_URL;
+const baseURL = rawBase
+  ? rawBase.replace(/\/api\/?$/, '').replace(/\/$/, '') + '/api'
+  : '/api';
+
+const api = axios.create({ baseURL });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
