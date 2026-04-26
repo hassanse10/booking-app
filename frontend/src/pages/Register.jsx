@@ -3,10 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 
-const STUDY_LEVELS = [
-  'Primary School', 'Middle School', 'High School',
-  'Undergraduate', 'Graduate', 'Professional', 'Other',
-];
+const NIVEAUX = ['3ème', '4ème', 'Seconde', 'Première', 'Terminale', 'Autre'];
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -24,9 +21,9 @@ export default function Register() {
     e.preventDefault();
     setError('');
     if (form.password !== form.confirmPassword)
-      return setError('Passwords do not match');
+      return setError('Les mots de passe ne correspondent pas');
     if (form.password.length < 6)
-      return setError('Password must be at least 6 characters');
+      return setError('Le mot de passe doit contenir au moins 6 caractères');
 
     setLoading(true);
     try {
@@ -35,7 +32,7 @@ export default function Register() {
       login(data.token, data.user);
       navigate('/dashboard', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed');
+      setError(err.response?.data?.error || 'Échec de l\'inscription');
     } finally {
       setLoading(false);
     }
@@ -62,8 +59,8 @@ export default function Register() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl shadow-lg mb-4">
             <span className="text-3xl">🎓</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Create account</h1>
-          <p className="text-gray-500 mt-1">Register to book sessions with the teacher</p>
+          <h1 className="text-3xl font-bold text-gray-900">Créer un compte</h1>
+          <p className="text-gray-500 mt-1">Inscrivez-vous pour réserver des séances</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -75,27 +72,27 @@ export default function Register() {
             )}
 
             <div className="grid grid-cols-2 gap-3">
-              {field('First Name', 'first_name', 'text', 'John')}
-              {field('Last Name',  'last_name',  'text', 'Doe')}
+              {field('Prénom', 'first_name', 'text', 'Prénom')}
+              {field('Nom',    'last_name',  'text', 'Nom de famille')}
             </div>
 
-            {field('Email address', 'email', 'email', 'you@example.com')}
+            {field('Adresse e-mail', 'email', 'email', 'vous@exemple.com')}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Study Level</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Niveau scolaire</label>
               <select
                 value={form.study_level}
                 onChange={set('study_level')}
                 required
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm bg-white"
               >
-                <option value="">Select your level…</option>
-                {STUDY_LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+                <option value="">Sélectionnez votre niveau…</option>
+                {NIVEAUX.map((n) => <option key={n} value={n}>{n}</option>)}
               </select>
             </div>
 
-            {field('Password',         'password',        'password', 'Min. 6 characters')}
-            {field('Confirm Password', 'confirmPassword', 'password', 'Re-enter password')}
+            {field('Mot de passe',           'password',        'password', 'Min. 6 caractères')}
+            {field('Confirmer le mot de passe', 'confirmPassword', 'password', 'Retaper le mot de passe')}
 
             <button
               type="submit"
@@ -105,16 +102,16 @@ export default function Register() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                  Creating account…
+                  Création du compte…
                 </span>
-              ) : 'Create Account'}
+              ) : 'Créer mon compte'}
             </button>
           </form>
         </div>
 
         <p className="text-center text-gray-500 mt-6 text-sm">
-          Already have an account?{' '}
-          <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">Sign In</Link>
+          Vous avez déjà un compte ?{' '}
+          <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">Se connecter</Link>
         </p>
       </div>
     </div>

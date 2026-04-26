@@ -19,7 +19,7 @@ export default function Login() {
       login(data.token, data.user);
       navigate(data.user.role === 'teacher' ? '/teacher' : '/dashboard', { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Check your credentials.');
+      setError(err.response?.data?.error || 'Identifiants incorrects. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }
@@ -33,8 +33,8 @@ export default function Login() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl shadow-lg mb-4">
             <span className="text-3xl">📚</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
-          <p className="text-gray-500 mt-1">Sign in to your account</p>
+          <h1 className="text-3xl font-bold text-gray-900">Bon retour !</h1>
+          <p className="text-gray-500 mt-1">Connectez-vous à votre espace</p>
         </div>
 
         {/* Card */}
@@ -47,20 +47,20 @@ export default function Login() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Adresse e-mail</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm"
-                placeholder="you@example.com"
+                placeholder="vous@exemple.com"
                 required
                 autoComplete="email"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Mot de passe</label>
               <input
                 type="password"
                 value={form.password}
@@ -80,17 +80,17 @@ export default function Login() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                  Signing in…
+                  Connexion…
                 </span>
-              ) : 'Sign In'}
+              ) : 'Se connecter'}
             </button>
           </form>
         </div>
 
         <p className="text-center text-gray-500 mt-6 text-sm">
-          Don't have an account?{' '}
+          Pas encore de compte ?{' '}
           <Link to="/register" className="text-indigo-600 hover:text-indigo-700 font-medium">
-            Register as Student
+            S'inscrire en tant qu'élève
           </Link>
         </p>
       </div>
