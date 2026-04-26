@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://booking-app-production-ed39.up.railway.app/api/:path*"
+    }
+  ]
+}
