@@ -5,7 +5,10 @@ const pool     = require('../config/database');
 
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'teacher_booking_jwt_secret_key_2024_abc123xyz';
+const JWT_SECRET      = process.env.JWT_SECRET       || 'teacher_booking_jwt_secret_key_2024_abc123xyz';
+const TEACHER_EMAIL   = process.env.TEACHER_EMAIL    || 'teacher@example.com';
+const TEACHER_PASSWORD = process.env.TEACHER_PASSWORD || 'teacher123';
+const TEACHER_NAME    = process.env.TEACHER_NAME     || 'Ahmed Ben Ali';
 
 const signToken = (payload) =>
   jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
@@ -52,15 +55,14 @@ router.post('/login', async (req, res) => {
     return res.status(400).json({ error: 'Email and password required' });
 
   // Teacher login (hardcoded)
-  if (email === process.env.TEACHER_EMAIL) {
-    if (password !== process.env.TEACHER_PASSWORD)
+  if (email === TEACHER_EMAIL) {
+    if (password !== TEACHER_PASSWORD)
       return res.status(401).json({ error: 'Invalid credentials' });
 
-    const name = process.env.TEACHER_NAME || 'Teacher';
-    const token = signToken({ id: 0, email, role: 'teacher', name,
-      first_name: name, last_name: '' });
-    return res.json({ token, user: { id: 0, email, role: 'teacher', name,
-      first_name: name, last_name: '' } });
+    const token = signToken({ id: 0, email, role: 'teacher',
+      first_name: TEACHER_NAME, last_name: '' });
+    return res.json({ token, user: { id: 0, email, role: 'teacher',
+      first_name: TEACHER_NAME, last_name: '' } });
   }
 
   // Student login
