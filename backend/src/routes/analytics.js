@@ -12,10 +12,11 @@ const requireTeacher = (req, res, next) => {
   next();
 };
 
-router.use(authenticateToken, requireTeacher);
+// Apply auth to all routes
+router.use(authenticateToken);
 
-// GET /api/analytics/revenue - Revenue metrics
-router.get('/revenue', async (req, res) => {
+// GET /api/analytics/revenue - Revenue metrics (teacher-only)
+router.get('/revenue', requireTeacher, async (req, res) => {
   try {
     const now = new Date();
     const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -68,8 +69,8 @@ router.get('/revenue', async (req, res) => {
   }
 });
 
-// GET /api/analytics/engagement - Engagement metrics
-router.get('/engagement', async (req, res) => {
+// GET /api/analytics/engagement - Engagement metrics (teacher-only)
+router.get('/engagement', requireTeacher, async (req, res) => {
   try {
     // Most active students (by booking count)
     const { rows: mostActive } = await pool.query(
@@ -140,8 +141,8 @@ router.get('/engagement', async (req, res) => {
   }
 });
 
-// GET /api/analytics/peak-hours - Peak hours heatmap data
-router.get('/peak-hours', async (req, res) => {
+// GET /api/analytics/peak-hours - Peak hours heatmap data (teacher-only)
+router.get('/peak-hours', requireTeacher, async (req, res) => {
   try {
     const { rows } = await pool.query(
       `SELECT
@@ -193,8 +194,8 @@ router.get('/peak-hours', async (req, res) => {
   }
 });
 
-// GET /api/analytics/conversion-funnel - Conversion metrics
-router.get('/conversion-funnel', async (req, res) => {
+// GET /api/analytics/conversion-funnel - Conversion metrics (teacher-only)
+router.get('/conversion-funnel', requireTeacher, async (req, res) => {
   try {
     // Total registered students
     const { rows: totalRows } = await pool.query(
@@ -330,8 +331,8 @@ router.get('/student-progress/:student_id', async (req, res) => {
   }
 });
 
-// GET /api/analytics/invoices-due - Overdue invoices
-router.get('/invoices-due', async (req, res) => {
+// GET /api/analytics/invoices-due - Overdue invoices (teacher-only)
+router.get('/invoices-due', requireTeacher, async (req, res) => {
   try {
     const { rows } = await pool.query(
       `SELECT i.*, s.first_name, s.last_name, s.email,
