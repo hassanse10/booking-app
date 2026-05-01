@@ -71,7 +71,7 @@ export default function InvoiceHistory() {
             <p className="text-2xl font-extrabold text-emerald-700">{totalPaid.toFixed(2)}€</p>
             <p className="text-sm font-medium text-emerald-600 mt-1">Total payé</p>
           </div>
-          <div className={`border rounded-2xl p-5 ${totalDue > 0 ? 'bg-amber-50 border-amber-100' : 'bg-gray-50 border-gray-100'}`}>
+          <div className={`border rounded-2xl p-5 ${totalDue > 0 ? 'bg-amber-50 border-amber-100' : 'bg-slate-50 border-slate-100'}`}>
             <p className={`text-2xl font-extrabold ${totalDue > 0 ? 'text-amber-700' : 'text-slate-400'}`}>
               {totalDue.toFixed(2)}€
             </p>
@@ -103,7 +103,7 @@ export default function InvoiceHistory() {
         {/* Invoice list */}
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+            <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400" />
           </div>
         ) : error ? (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-red-800 text-center">
@@ -115,7 +115,7 @@ export default function InvoiceHistory() {
             <p className="text-slate-500 font-semibold">Aucune facture trouvée</p>
             {filter !== 'all' && (
               <button onClick={() => setFilter('all')}
-                className="mt-3 text-indigo-600 text-sm font-medium hover:underline">
+                className="mt-3 text-cyan-600 text-sm font-medium hover:underline">
                 Voir toutes les factures
               </button>
             )}
@@ -131,7 +131,7 @@ export default function InvoiceHistory() {
                       <StatusBadge status={inv.status} />
                       <span className="text-xs text-slate-400">#{String(inv.id).padStart(4, '0')}</span>
                     </div>
-                    <p className="font-semibold text-gray-800">
+                    <p className="font-semibold text-slate-900">
                       {inv.description || 'Séance de cours'}
                     </p>
                     <p className="text-sm text-slate-500 mt-0.5">
@@ -151,7 +151,7 @@ export default function InvoiceHistory() {
                     )}
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-xl font-extrabold text-gray-800">
+                    <p className="text-xl font-extrabold text-slate-900">
                       {parseFloat(inv.amount).toFixed(2)}€
                     </p>
                     {inv.payment_method && (
@@ -166,8 +166,8 @@ export default function InvoiceHistory() {
 
         {/* Info box if empty overall */}
         {!loading && !error && invoices.length === 0 && (
-          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
-            <p className="text-sm text-blue-800">
+          <div className="bg-cyan-50 border border-cyan-100 rounded-2xl p-5">
+            <p className="text-sm text-cyan-800">
               💡 Les factures sont générées par votre professeur après chaque séance.
               Elles apparaîtront ici une fois émises.
             </p>

@@ -109,16 +109,16 @@ export default function StudentProgress() {
         {/* ── Next Milestone ─────────────────────────────────── */}
         {nextMilestone && (
           <div className="bg-white rounded-2xl border border-slate-200 p-5">
-            <p className="text-sm font-semibold text-gray-600 mb-3">
-              Prochain objectif: <span className="text-indigo-600">{nextMilestone.label}</span>
+            <p className="text-sm font-semibold text-slate-600 mb-3">
+              Prochain objectif: <span className="text-cyan-600">{nextMilestone.label}</span>
             </p>
-            <div className="w-full bg-gray-100 rounded-full h-3 mb-2">
+            <div className="w-full bg-slate-100 rounded-full h-3 mb-2">
               <div
                 className="bg-cyan-500 h-3 rounded-full transition-all"
                 style={{ width: `${Math.min(100, (nextMilestone.current / nextMilestone.target) * 100)}%` }}
               />
             </div>
-            <p className="text-xs text-gray-400 text-right">
+            <p className="text-xs text-slate-400 text-right">
               {nextMilestone.current} / {nextMilestone.target}
             </p>
           </div>
@@ -127,7 +127,7 @@ export default function StudentProgress() {
         {/* ── Milestones ─────────────────────────────────────── */}
         {milestones.length > 0 && (
           <div className="bg-white rounded-2xl border border-slate-200 p-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">🏅 Succès débloqués</h2>
+            <h2 className="text-lg font-bold text-slate-800 mb-4">🏅 Succès débloqués</h2>
             <div className="space-y-2">
               {milestones.map((m, i) => (
                 <MilestoneCard key={i} icon={m.icon} text={m.milestone} />
@@ -138,14 +138,14 @@ export default function StudentProgress() {
 
         {/* ── Session Timeline ───────────────────────────────── */}
         <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <h2 className="text-lg font-bold text-gray-800 mb-5">📋 Historique des Séances</h2>
+          <h2 className="text-lg font-bold text-slate-800 mb-5">📋 Historique des Séances</h2>
 
           {sessions.length === 0 ? (
             <div className="text-center py-10">
               <p className="text-5xl mb-3">📚</p>
               <p className="text-slate-500 font-semibold">Aucune séance pour le moment</p>
               <button onClick={() => navigate('/dashboard')}
-                className="mt-4 px-5 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">
+                className="mt-4 px-5 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl text-sm font-semibold hover:from-cyan-500 hover:to-blue-600 transition">
                 Réserver une séance
               </button>
             </div>
@@ -158,9 +158,9 @@ export default function StudentProgress() {
                 {sessions.map((s, i) => (
                   <div key={s.id} className="relative">
                     {/* Dot */}
-                    <div className="absolute -left-[2.15rem] top-1 w-4 h-4 rounded-full border-2 border-indigo-400 bg-white" />
+                    <div className="absolute -left-[2.15rem] top-1 w-4 h-4 rounded-full border-2 border-cyan-400 bg-white" />
 
-                    <div className="bg-gray-50 rounded-xl border border-slate-200 p-4">
+                    <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div>
                           <p className="font-bold text-slate-900 capitalize text-sm">{fmtDate(s.date)}</p>
@@ -176,18 +176,18 @@ export default function StudentProgress() {
                       {s.topics_covered && (
                         <div className="mt-2 pt-2 border-t border-slate-200">
                           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Sujets abordés</p>
-                          <p className="text-sm text-gray-700">{s.topics_covered}</p>
+                          <p className="text-sm text-slate-700">{s.topics_covered}</p>
                         </div>
                       )}
                       {s.homework_assigned && (
                         <div className="mt-2">
                           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Devoir</p>
-                          <p className="text-sm text-gray-700">{s.homework_assigned}</p>
+                          <p className="text-sm text-slate-700">{s.homework_assigned}</p>
                         </div>
                       )}
                       {s.next_focus_areas && (
                         <div className="mt-2">
-                          <p className="text-xs font-semibold text-indigo-500 uppercase tracking-wide mb-1">Prochaine séance</p>
+                          <p className="text-xs font-semibold text-cyan-500 uppercase tracking-wide mb-1">Prochaine séance</p>
                           <p className="text-sm text-cyan-700 font-medium">{s.next_focus_areas}</p>
                         </div>
                       )}
