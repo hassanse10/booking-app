@@ -47,31 +47,31 @@ export default function SessionNotesModal({ booking, onClose, onSaved }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#111827] rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-white/10">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Notes de Séance</h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <h2 className="text-lg font-bold text-white">Notes de Séance</h2>
+            <p className="text-xs text-slate-400 mt-0.5">
               {fmtDate(booking.date)} · {booking.first_name} {booking.last_name}
             </p>
           </div>
           <button onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition text-xl">
+            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition text-xl">
             ✕
           </button>
         </div>
 
         <div className="p-6 space-y-5">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">{error}</div>
+            <div className="p-3 bg-red-950/50 border border-red-500/30 rounded-lg text-red-300 text-sm">{error}</div>
           )}
 
           {/* Teacher Notes */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-slate-300 mb-2">
               Notes de cours <span className="text-red-400">*</span>
             </label>
             <textarea
@@ -79,52 +79,52 @@ export default function SessionNotesModal({ booking, onClose, onSaved }) {
               onChange={e => setTeacherNotes(e.target.value)}
               placeholder="Résumé de la séance, ce qui a été travaillé…"
               rows={4}
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none resize-none"
+              className="w-full px-3 py-2.5 bg-[#0d1a2e] border border-white/10 rounded-xl text-white placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none resize-none"
             />
           </div>
 
           {/* Topics */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Sujets abordés</label>
+            <label className="block text-sm font-semibold text-slate-300 mb-2">Sujets abordés</label>
             <input
               value={topicsCovered}
               onChange={e => setTopicsCovered(e.target.value)}
               placeholder="ex: Équations du 2nd degré, Trigonométrie…"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+              className="w-full px-3 py-2.5 bg-[#0d1a2e] border border-white/10 rounded-xl text-white placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
             />
           </div>
 
           {/* Homework */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Devoirs assignés</label>
+            <label className="block text-sm font-semibold text-slate-300 mb-2">Devoirs assignés</label>
             <input
               value={homeworkAssigned}
               onChange={e => setHomeworkAssigned(e.target.value)}
               placeholder="ex: Exercices p.45-47, revoir la leçon…"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+              className="w-full px-3 py-2.5 bg-[#0d1a2e] border border-white/10 rounded-xl text-white placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
             />
           </div>
 
           {/* Next Focus */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Focus prochaine séance</label>
+            <label className="block text-sm font-semibold text-slate-300 mb-2">Focus prochaine séance</label>
             <input
               value={nextFocusAreas}
               onChange={e => setNextFocusAreas(e.target.value)}
               placeholder="ex: Correction des devoirs, intégrales…"
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+              className="w-full px-3 py-2.5 bg-[#0d1a2e] border border-white/10 rounded-xl text-white placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
             />
           </div>
 
           {/* Student Rating (by teacher) */}
-          <div className="pt-4 border-t border-gray-100">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+          <div className="pt-4 border-t border-white/10">
+            <label className="block text-sm font-semibold text-slate-300 mb-3">
               Évaluation de l'élève (optionnel)
             </label>
             <div className="flex gap-2 mb-3">
               {[1, 2, 3, 4, 5].map(star => (
                 <button key={star} type="button" onClick={() => setTeacherRating(star)}
-                  className={`text-3xl transition-transform hover:scale-110 ${star <= teacherRating ? 'text-yellow-400' : 'text-gray-300'}`}>
+                  className={`text-3xl transition-transform hover:scale-110 ${star <= teacherRating ? 'text-yellow-400' : 'text-slate-600'}`}>
                   ★
                 </button>
               ))}
@@ -135,20 +135,20 @@ export default function SessionNotesModal({ booking, onClose, onSaved }) {
                 onChange={e => setTeacherFeedback(e.target.value)}
                 placeholder="Commentaire sur l'élève (participation, progrès…)"
                 rows={2}
-                className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none resize-none"
+                className="w-full px-3 py-2.5 bg-[#0d1a2e] border border-white/10 rounded-xl text-white placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none resize-none"
               />
             )}
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 px-6 py-4 border-t border-gray-100">
+        <div className="flex gap-3 px-6 py-4 border-t border-white/10">
           <button onClick={onClose} disabled={saving}
-            className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition disabled:opacity-50">
+            className="flex-1 px-4 py-2.5 border border-white/10 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/10 transition disabled:opacity-50">
             Annuler
           </button>
           <button onClick={handleSave} disabled={saving}
-            className="flex-1 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
+            className="flex-1 px-4 py-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white rounded-xl text-sm font-semibold transition disabled:opacity-50">
             {saving ? 'Enregistrement…' : 'Sauvegarder'}
           </button>
         </div>

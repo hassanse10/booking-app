@@ -29,33 +29,33 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#0a0f1e] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo & Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-3xl mb-4 shadow-lg">
             <span className="text-4xl">📚</span>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900">Bon retour!</h1>
-          <p className="text-slate-500 mt-2">Connectez-vous à votre espace de cours</p>
+          <h1 className="text-3xl font-bold text-white">Bon retour!</h1>
+          <p className="text-slate-400 mt-2">Connectez-vous à votre espace de cours</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm">
+        <div className="bg-[#111827] rounded-3xl p-8 border border-white/10">
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm font-medium">
+              <div className="flex items-center gap-2 bg-red-950/50 border border-red-500/30 text-red-300 px-4 py-3 rounded-2xl text-sm font-medium">
                 <span>⚠️</span> {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+              <label className="block text-sm font-semibold text-slate-300 mb-2">Email</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm"
+                className="w-full px-4 py-3 border border-white/10 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm bg-[#0d1a2e] text-white placeholder:text-slate-500"
                 placeholder="vous@exemple.com"
                 required
                 autoComplete="email"
@@ -63,12 +63,12 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Mot de passe</label>
+              <label className="block text-sm font-semibold text-slate-300 mb-2">Mot de passe</label>
               <input
                 type="password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm"
+                className="w-full px-4 py-3 border border-white/10 rounded-2xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-sm bg-[#0d1a2e] text-white placeholder:text-slate-500"
                 placeholder="••••••••"
                 required
                 autoComplete="current-password"
@@ -90,14 +90,14 @@ export default function Login() {
           </form>
 
           {/* Demo info */}
-          <div className="mt-6 p-3 bg-blue-50 rounded-2xl border border-blue-100">
-            <p className="text-xs text-blue-700 font-medium">📝 Démo: sara.dupont@cours.fr / demo1234</p>
+          <div className="mt-6 p-3 bg-cyan-400/10 rounded-2xl border border-cyan-400/20">
+            <p className="text-xs text-cyan-300 font-medium">📝 Démo: sara.dupont@cours.fr / demo1234</p>
           </div>
         </div>
 
-        <p className="text-center text-slate-600 mt-6 text-sm">
+        <p className="text-center text-slate-400 mt-6 text-sm">
           Pas encore de compte?{' '}
-          <Link to="/register" className="text-cyan-600 hover:text-cyan-700 font-semibold">
+          <Link to="/register" className="text-cyan-400 hover:text-cyan-300 font-semibold">
             S'inscrire
           </Link>
         </p>

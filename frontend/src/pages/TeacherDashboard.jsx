@@ -44,7 +44,7 @@ function StatusDot({ status }) {
   return (
     <span className="flex items-center gap-1.5">
       <span className={`w-2 h-2 rounded-full inline-block ${map[status] ?? 'bg-gray-400'}`} />
-      <span className="text-xs font-medium text-gray-600">{labels[status] ?? status}</span>
+      <span className="text-xs font-medium text-slate-400">{labels[status] ?? status}</span>
     </span>
   );
 }
@@ -91,44 +91,44 @@ function WeekCalendar({ bookings, onNotesClick }) {
     <div>
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="font-bold text-slate-900 capitalize">{monthLabel}</h2>
+          <h2 className="font-bold text-white capitalize">{monthLabel}</h2>
           <p className="text-xs text-slate-400">Vue hebdomadaire</p>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setWeekOffset(0)}
-            className="px-3 py-1.5 text-xs border border-slate-200 bg-white rounded-lg hover:bg-slate-50 font-medium text-slate-600 transition shadow-sm">
+            className="px-3 py-1.5 text-xs border border-white/10 bg-[#111827] rounded-lg hover:bg-white/5 font-medium text-slate-300 transition shadow-sm">
             Aujourd'hui
           </button>
           <button onClick={() => setWeekOffset(w => w - 1)}
-            className="w-8 h-8 flex items-center justify-center border border-slate-200 bg-white rounded-lg hover:bg-slate-50 text-slate-600 font-bold transition shadow-sm">‹</button>
+            className="w-8 h-8 flex items-center justify-center border border-white/10 bg-[#111827] rounded-lg hover:bg-white/5 text-slate-300 font-bold transition shadow-sm">‹</button>
           <button onClick={() => setWeekOffset(w => w + 1)}
-            className="w-8 h-8 flex items-center justify-center border border-slate-200 bg-white rounded-lg hover:bg-slate-50 text-slate-600 font-bold transition shadow-sm">›</button>
+            className="w-8 h-8 flex items-center justify-center border border-white/10 bg-[#111827] rounded-lg hover:bg-white/5 text-slate-300 font-bold transition shadow-sm">›</button>
         </div>
       </div>
 
-      <div className="flex gap-3 mb-4 text-xs text-slate-500">
+      <div className="flex gap-3 mb-4 text-xs text-slate-400">
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-cyan-400 inline-block" /> 1h (15€)</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-cyan-500 inline-block" /> 1h30 (18€)</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-blue-500 inline-block" /> 2h (25€)</span>
       </div>
 
-      <div className="overflow-x-auto rounded-3xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-3xl bg-[#111827] shadow-sm">
         <div className="min-w-[700px]">
-          <div className="grid grid-cols-8 border-b border-slate-200">
+          <div className="grid grid-cols-8 border-b border-white/10">
             <div className="p-2" />
             {days.map((d, i) => {
               const ds  = toDateStr(d);
               const cnt = (byDate[ds] || []).length;
               return (
-                <div key={i} className={`p-3 text-center border-l border-slate-200 ${ds === todayStr ? 'bg-cyan-50' : ''}`}>
+                <div key={i} className={`p-3 text-center border-l border-white/10 ${ds === todayStr ? 'bg-cyan-400/10' : ''}`}>
                   <p className="text-xs text-slate-400 font-medium">
                     {d.toLocaleDateString('fr-FR', { weekday: 'short' }).toUpperCase()}
                   </p>
-                  <p className={`text-lg font-bold ${ds === todayStr ? 'text-cyan-500' : 'text-slate-800'}`}>
+                  <p className={`text-lg font-bold ${ds === todayStr ? 'text-cyan-400' : 'text-white'}`}>
                     {d.getDate()}
                   </p>
                   {cnt > 0 && (
-                    <span className="text-xs bg-cyan-100 text-cyan-600 rounded-full px-2 font-semibold">{cnt}</span>
+                    <span className="text-xs bg-cyan-400/10 text-cyan-400 rounded-full px-2 font-semibold">{cnt}</span>
                   )}
                 </div>
               );
@@ -136,9 +136,9 @@ function WeekCalendar({ bookings, onNotesClick }) {
           </div>
 
           <div className="grid grid-cols-8" style={{ height: `${CELL_H}px` }}>
-            <div className="relative border-r border-slate-200">
+            <div className="relative border-r border-white/10">
               {HOURS.map(h => (
-                <div key={h} className="absolute w-full text-right pr-2 text-xs text-slate-300 font-medium"
+                <div key={h} className="absolute w-full text-right pr-2 text-xs text-slate-500 font-medium"
                   style={{ top: `${((h - 7) / 15) * 100}%` }}>{h}h</div>
               ))}
             </div>
@@ -147,9 +147,9 @@ function WeekCalendar({ bookings, onNotesClick }) {
               const dayBooks = byDate[ds] || [];
               const isToday  = ds === todayStr;
               return (
-                <div key={di} className={`relative border-l border-slate-200 ${isToday ? 'bg-cyan-50/30' : ''}`}>
+                <div key={di} className={`relative border-l border-white/10 ${isToday ? 'bg-cyan-400/10' : ''}`}>
                   {HOURS.map(h => (
-                    <div key={h} className="absolute w-full border-t border-gray-100"
+                    <div key={h} className="absolute w-full border-t border-white/5"
                       style={{ top: `${((h - 7) / 15) * 100}%` }} />
                   ))}
                   {dayBooks.map(b => {
@@ -190,17 +190,17 @@ function MiniCalendar({ selected, onSelect, availableDays }) {
   const todayStr = today.toISOString().split('T')[0];
 
   return (
-    <div className="bg-white rounded-3xl p-4 select-none shadow-sm">
+    <div className="bg-[#111827] rounded-3xl p-4 select-none shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <button onClick={() => setView(new Date(year, month - 1, 1))}
-          className="w-8 h-8 rounded-xl hover:bg-slate-100 transition text-slate-400 flex items-center justify-center font-bold text-lg">‹</button>
-        <span className="font-semibold text-slate-800 text-sm capitalize">{MONTHS[month]} {year}</span>
+          className="w-8 h-8 rounded-xl hover:bg-white/10 transition text-slate-400 flex items-center justify-center font-bold text-lg">‹</button>
+        <span className="font-semibold text-white text-sm capitalize">{MONTHS[month]} {year}</span>
         <button onClick={() => setView(new Date(year, month + 1, 1))}
-          className="w-8 h-8 rounded-xl hover:bg-slate-100 transition text-slate-400 flex items-center justify-center font-bold text-lg">›</button>
+          className="w-8 h-8 rounded-xl hover:bg-white/10 transition text-slate-400 flex items-center justify-center font-bold text-lg">›</button>
       </div>
       <div className="grid grid-cols-7 mb-1">
         {DAYS_SHORT.map((d) => (
-          <div key={d} className="text-center text-xs font-medium text-slate-300 py-1">{d}</div>
+          <div key={d} className="text-center text-xs font-medium text-slate-500 py-1">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-0.5">
@@ -216,10 +216,10 @@ function MiniCalendar({ selected, onSelect, availableDays }) {
             <button key={day} onClick={() => isAvail && onSelect(dateStr)} disabled={!isAvail}
               className={[
                 'aspect-square flex items-center justify-center text-xs rounded-xl transition font-medium',
-                isSel    ? 'bg-cyan-400 text-white shadow-sm'                        : '',
-                !isSel && isAvail ? 'hover:bg-cyan-50 text-slate-800 cursor-pointer'  : '',
-                !isAvail ? 'text-slate-200 cursor-not-allowed'                          : '',
-                isToday && !isSel ? 'ring-2 ring-cyan-300 text-cyan-500 font-bold' : '',
+                isSel    ? 'bg-cyan-400 text-white shadow-sm'                              : '',
+                !isSel && isAvail ? 'hover:bg-cyan-400/10 text-white cursor-pointer'       : '',
+                !isAvail ? 'text-slate-600 cursor-not-allowed'                             : '',
+                isToday && !isSel ? 'ring-2 ring-cyan-400 text-cyan-400 font-bold'        : '',
               ].join(' ')}>
               {day}
             </button>
@@ -234,26 +234,26 @@ function MiniCalendar({ selected, onSelect, availableDays }) {
 function SlotGrid({ slots, selected, onSelect, loading, selectedDate }) {
   if (!selectedDate)
     return (
-      <div className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400 bg-slate-50">
+      <div className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-white/10 rounded-3xl text-slate-400 bg-[#0d1a2e]">
         <span className="text-3xl mb-1">📅</span>
         <p className="text-xs">Sélectionnez une date</p>
       </div>
     );
   if (loading)
     return (
-      <div className="flex items-center justify-center h-40 rounded-3xl bg-white shadow-sm">
+      <div className="flex items-center justify-center h-40 rounded-3xl bg-[#111827] shadow-sm">
         <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-cyan-400" />
       </div>
     );
   if (!slots.length)
     return (
-      <div className="flex flex-col items-center justify-center h-40 rounded-3xl text-slate-400 bg-white shadow-sm">
+      <div className="flex flex-col items-center justify-center h-40 rounded-3xl text-slate-400 bg-[#111827] shadow-sm">
         <span className="text-3xl mb-1">😕</span>
         <p className="text-xs">Aucun créneau disponible</p>
       </div>
     );
   return (
-    <div className="bg-white rounded-3xl p-3 max-h-52 overflow-y-auto shadow-sm">
+    <div className="bg-[#111827] rounded-3xl p-3 max-h-52 overflow-y-auto shadow-sm">
       <div className="grid grid-cols-3 gap-1.5">
         {slots.map((slot) => (
           <button key={slot.start} onClick={() => onSelect(slot)}
@@ -261,7 +261,7 @@ function SlotGrid({ slots, selected, onSelect, loading, selectedDate }) {
               'py-2 px-1 rounded-xl text-xs font-semibold transition',
               selected?.start === slot.start
                 ? 'bg-cyan-400 text-white shadow-sm'
-                : 'bg-slate-50 text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 border border-slate-200',
+                : 'bg-[#0d1a2e] text-slate-300 hover:bg-cyan-400/10 hover:text-cyan-400 border border-white/10',
             ].join(' ')}>
             {fmtTime(slot.start)}
           </button>
@@ -304,50 +304,50 @@ function ModifyModal({ booking, availableDays, onClose, onSaved }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-[#111827] rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/10">
+        <div className="flex items-center justify-between p-6 border-b border-white/10">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Modifier la réservation</h2>
+            <h2 className="text-lg font-bold text-white">Modifier la réservation</h2>
             <p className="text-xs text-slate-400 mt-0.5">
               {booking.first_name} {booking.last_name}
               {booking.study_level && ` · ${booking.study_level}`}
             </p>
           </div>
           <button onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition text-xl">✕</button>
+            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition text-xl">✕</button>
         </div>
         <div className="p-6">
-          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mb-5 text-sm text-blue-800">
+          <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-xl px-4 py-3 mb-5 text-sm text-blue-300">
             <span>📌</span>
             Actuel : {fmtDateLong(booking.date)} à {fmtTime(booking.start_time)}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-slate-800 mb-2 text-sm">Nouvelle date</h3>
+                <h3 className="font-semibold text-white mb-2 text-sm">Nouvelle date</h3>
                 <MiniCalendar selected={date} onSelect={setDate} availableDays={availableDays} />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-800 mb-2 text-sm">Durée & Tarif</h3>
+                <h3 className="font-semibold text-white mb-2 text-sm">Durée & Tarif</h3>
                 <div className="grid grid-cols-3 gap-2">
                   {DURATIONS.map((d) => (
                     <button key={d.value} onClick={() => { setDuration(d.value); setSlot(null); }}
                       className={`py-2.5 rounded-xl text-xs font-semibold transition flex flex-col items-center gap-0.5 ${
-                        duration === d.value ? 'bg-cyan-400 text-white shadow-sm' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-cyan-300'
+                        duration === d.value ? 'bg-cyan-400 text-white shadow-sm' : 'bg-[#0d1a2e] text-slate-300 border border-white/10 hover:border-cyan-400/50'
                       }`}>
                       <span>{d.label}</span>
-                      <span className={`font-bold ${duration === d.value ? 'text-cyan-100' : 'text-cyan-500'}`}>{d.price}€</span>
+                      <span className={`font-bold ${duration === d.value ? 'text-cyan-100' : 'text-cyan-400'}`}>{d.price}€</span>
                     </button>
                   ))}
                 </div>
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-800 mb-2 text-sm">Nouveau créneau</h3>
+              <h3 className="font-semibold text-white mb-2 text-sm">Nouveau créneau</h3>
               <SlotGrid slots={slots} selected={slot} onSelect={setSlot} loading={loading} selectedDate={date} />
               {slot && date && (
-                <div className="mt-3 bg-cyan-50 rounded-xl p-3 text-sm text-cyan-800 space-y-0.5 border border-cyan-100">
+                <div className="mt-3 bg-cyan-400/10 rounded-xl p-3 text-sm text-cyan-400 space-y-0.5 border border-cyan-400/20">
                   <p>📅 {fmtDateLong(date)}</p>
                   <p>⏰ {fmtTime(slot.start)} — {fmtTime(slot.end)}</p>
                 </div>
@@ -355,9 +355,9 @@ function ModifyModal({ booking, availableDays, onClose, onSaved }) {
             </div>
           </div>
         </div>
-        <div className="flex gap-3 justify-end px-6 py-4 border-t border-slate-200">
+        <div className="flex gap-3 justify-end px-6 py-4 border-t border-white/10">
           <button onClick={onClose}
-            className="px-5 py-2 border border-slate-200 rounded-xl text-sm hover:bg-slate-50 transition font-medium">Annuler</button>
+            className="px-5 py-2 border border-white/10 rounded-xl text-sm text-slate-300 hover:bg-white/5 transition font-medium">Annuler</button>
           <button onClick={handleSave} disabled={!slot || !date || saving}
             className="px-5 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white rounded-xl text-sm font-semibold disabled:opacity-50 transition shadow-sm">
             {saving ? 'Enregistrement…' : 'Confirmer les modifications'}
@@ -373,7 +373,7 @@ function SideIcon({ icon, label, active, onClick }) {
   return (
     <button onClick={onClick} title={label}
       className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg transition ${
-        active ? 'bg-gradient-to-br from-cyan-400 to-blue-500 shadow-sm text-white' : 'hover:bg-slate-100 text-slate-400'
+        active ? 'bg-gradient-to-br from-cyan-400 to-blue-500 shadow-sm text-white' : 'hover:bg-white/10 text-slate-400 hover:text-white'
       }`}>
       {icon}
     </button>
@@ -496,10 +496,10 @@ export default function TeacherDashboard() {
   ];
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
+    <div className="flex h-screen bg-[#0a0f1e] overflow-hidden">
 
       {/* ── Sidebar ── */}
-      <aside className="hidden md:flex w-16 bg-white border-r border-slate-200 flex-col items-center py-5 gap-2 fixed h-full z-20 shadow-sm">
+      <aside className="hidden md:flex w-16 bg-[#0d1526] border-r border-white/10 flex-col items-center py-5 gap-2 fixed h-full z-20 shadow-sm">
         {/* Logo */}
         <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-sm mb-3">
           <span className="text-lg">🎓</span>
@@ -513,7 +513,7 @@ export default function TeacherDashboard() {
         </div>
 
         <button onClick={logout} title="Déconnexion"
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50 transition text-lg">
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 hover:text-red-400 hover:bg-red-400/10 transition text-lg">
           ↩
         </button>
       </aside>
@@ -522,9 +522,9 @@ export default function TeacherDashboard() {
       <div className="flex-1 md:ml-16 flex flex-col overflow-hidden">
 
         {/* ── Top bar ── */}
-        <header className="bg-white border-b border-slate-200 px-5 py-4 flex items-center justify-between gap-4 shrink-0">
+        <header className="bg-[#0d1526] border-b border-white/10 px-5 py-4 flex items-center justify-between gap-4 shrink-0">
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-slate-900 leading-tight">
+            <h1 className="text-xl font-bold text-white leading-tight">
               Bonjour, {user.first_name} 👋
             </h1>
             <p className="text-xs text-slate-400 mt-0.5 hidden sm:block">
@@ -534,23 +534,23 @@ export default function TeacherDashboard() {
 
           <div className="flex items-center gap-2 shrink-0">
             {/* Pill nav */}
-            <nav className="hidden lg:flex bg-slate-100 rounded-full p-1 gap-1">
+            <nav className="hidden lg:flex bg-[#0d1a2e] rounded-full p-1 gap-1 border border-white/5">
               {navItems.map(n => (
                 <button key={n.id} onClick={() => setTab(n.id)}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
-                    tab === n.id ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'
+                    tab === n.id ? 'bg-cyan-400 text-[#0a0f1e] shadow-sm' : 'text-slate-400 hover:text-white'
                   }`}>
                   {n.label}
                 </button>
               ))}
               <button onClick={() => navigate('/analytics')}
-                className="px-4 py-1.5 rounded-full text-sm font-medium text-slate-500 hover:text-slate-800 transition">
+                className="px-4 py-1.5 rounded-full text-sm font-medium text-slate-400 hover:text-white transition">
                 Analyses
               </button>
             </nav>
 
             {/* Bell */}
-            <button className="w-9 h-9 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-50 transition text-base">
+            <button className="w-9 h-9 border border-white/10 rounded-full flex items-center justify-center text-slate-400 hover:bg-white/5 transition text-base">
               🔔
             </button>
 
@@ -579,32 +579,32 @@ export default function TeacherDashboard() {
             </div>
 
             {/* Revenue */}
-            <div className="bg-white rounded-3xl p-4 shadow-sm">
+            <div className="bg-[#111827] rounded-3xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold text-slate-400">Revenus estimés</p>
                 <span className="text-xl">💶</span>
               </div>
-              <p className="text-3xl font-extrabold text-slate-900">{totalRevenue}<span className="text-lg text-slate-400">€</span></p>
+              <p className="text-3xl font-extrabold text-white">{totalRevenue}<span className="text-lg text-slate-400">€</span></p>
               <p className="text-xs text-slate-400 mt-1">sur {confirmed.length} séances</p>
             </div>
 
             {/* Avg rating */}
-            <div className="bg-white rounded-3xl p-4 shadow-sm">
+            <div className="bg-[#111827] rounded-3xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold text-slate-400">Note moyenne</p>
                 <span className="text-xl">⭐</span>
               </div>
-              <p className="text-3xl font-extrabold text-slate-900">{avgRating ?? '—'}</p>
+              <p className="text-3xl font-extrabold text-white">{avgRating ?? '—'}</p>
               <p className="text-xs text-slate-400 mt-1">sur 5 étoiles</p>
             </div>
 
             {/* Canceled */}
-            <div className="bg-white rounded-3xl p-4 shadow-sm">
+            <div className="bg-[#111827] rounded-3xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold text-slate-400">Annulations</p>
                 <span className="text-xl">❌</span>
               </div>
-              <p className="text-3xl font-extrabold text-slate-900">{canceled.length}</p>
+              <p className="text-3xl font-extrabold text-white">{canceled.length}</p>
               <p className="text-xs text-slate-400 mt-1">
                 {bookings.length > 0 ? Math.round(canceled.length / bookings.length * 100) : 0}% du total
               </p>
@@ -615,7 +615,7 @@ export default function TeacherDashboard() {
           {tab === 'bookings' && (
             <div>
               <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-                <h2 className="font-bold text-slate-900">Toutes les séances</h2>
+                <h2 className="font-bold text-white">Toutes les séances</h2>
                 <div className="flex items-center gap-2 flex-wrap">
                   {[
                     { key: 'all', label: 'Tous' },
@@ -625,14 +625,14 @@ export default function TeacherDashboard() {
                     <button key={f.key} onClick={() => setStatusFilter(f.key)}
                       className={`px-3 py-1.5 text-xs rounded-xl font-semibold transition ${
                         statusFilter === f.key
-                          ? 'bg-slate-900 text-white shadow-sm'
-                          : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                          ? 'bg-[#111827] text-white border border-white/10 shadow-sm'
+                          : 'bg-[#0d1a2e] text-slate-400 border border-white/10 hover:bg-white/5'
                       }`}>
                       {f.label}
                     </button>
                   ))}
                   <button onClick={fetchBookings}
-                    className="px-3 py-1.5 text-xs border border-slate-200 rounded-xl hover:bg-slate-50 transition text-slate-500 bg-white font-medium shadow-sm flex items-center gap-1">
+                    className="px-3 py-1.5 text-xs border border-white/10 rounded-xl hover:bg-white/5 transition text-slate-400 bg-[#0d1a2e] font-medium shadow-sm flex items-center gap-1">
                     ↻ Actualiser
                   </button>
                 </div>
@@ -643,14 +643,14 @@ export default function TeacherDashboard() {
                   <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400" />
                 </div>
               ) : filtered.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-slate-400 bg-white rounded-3xl shadow-sm">
+                <div className="flex flex-col items-center justify-center py-16 text-slate-400 bg-[#111827] rounded-3xl shadow-sm">
                   <span className="text-4xl mb-3">📋</span>
                   <p className="font-medium">Aucune réservation trouvée</p>
                 </div>
               ) : (
-                <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+                <div className="bg-[#111827] rounded-3xl shadow-sm overflow-hidden">
                   {/* Table header */}
-                  <div className="grid grid-cols-12 gap-4 px-5 py-3 border-b border-slate-200 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                  <div className="grid grid-cols-12 gap-4 px-5 py-3 border-b border-white/10 text-xs font-semibold text-slate-400 uppercase tracking-wide">
                     <div className="col-span-4">Élève</div>
                     <div className="col-span-3 hidden sm:block">Date & Heure</div>
                     <div className="col-span-2 hidden md:block">Tarif</div>
@@ -661,17 +661,17 @@ export default function TeacherDashboard() {
                   {filtered.map((b, idx) => (
                     <div key={b.id}
                       className={`grid grid-cols-12 gap-4 px-5 py-4 items-center transition ${
-                        idx !== filtered.length - 1 ? 'border-b border-slate-100' : ''
-                      } ${b.status === 'canceled' ? 'opacity-50' : 'hover:bg-slate-50/50'}`}>
+                        idx !== filtered.length - 1 ? 'border-b border-white/5' : ''
+                      } ${b.status === 'canceled' ? 'opacity-50' : 'hover:bg-white/5'}`}>
 
                       {/* Student */}
                       <div className="col-span-4">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center font-bold text-cyan-600 text-xs shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-cyan-400/10 flex items-center justify-center font-bold text-cyan-400 text-xs shrink-0">
                             {b.first_name?.[0]}{b.last_name?.[0]}
                           </div>
                           <div className="min-w-0">
-                            <p className="font-semibold text-slate-900 text-sm truncate">{b.first_name} {b.last_name}</p>
+                            <p className="font-semibold text-white text-sm truncate">{b.first_name} {b.last_name}</p>
                             <p className="text-xs text-slate-400 truncate">{b.email}</p>
                           </div>
                         </div>
@@ -679,11 +679,11 @@ export default function TeacherDashboard() {
 
                       {/* Date */}
                       <div className="col-span-3 hidden sm:block">
-                        <p className="font-medium text-slate-800 text-sm capitalize">{fmtDate(b.date)}</p>
+                        <p className="font-medium text-slate-300 text-sm capitalize">{fmtDate(b.date)}</p>
                         <p className="text-xs text-slate-400">{fmtTime(b.start_time)} — {fmtTime(b.end_time)} · {durLabel(b.duration)}</p>
                         {b.meet_link && b.status !== 'canceled' && (
                           <a href={b.meet_link} target="_blank" rel="noopener noreferrer"
-                            className="text-xs text-cyan-500 hover:underline font-semibold mt-0.5 inline-block">
+                            className="text-xs text-cyan-400 hover:underline font-semibold mt-0.5 inline-block">
                             🔗 Rejoindre
                           </a>
                         )}
@@ -691,7 +691,7 @@ export default function TeacherDashboard() {
 
                       {/* Price */}
                       <div className="col-span-2 hidden md:block">
-                        <span className="font-bold text-slate-900">{durPrice(b.duration)}€</span>
+                        <span className="font-bold text-white">{durPrice(b.duration)}€</span>
                         {b.student_rating > 0 && (
                           <p className="text-amber-400 text-xs mt-0.5">{'★'.repeat(b.student_rating)}{'☆'.repeat(5 - b.student_rating)}</p>
                         )}
@@ -707,15 +707,15 @@ export default function TeacherDashboard() {
                         {b.status === 'confirmed' && (
                           <>
                             <button onClick={() => setNotesTarget(b)}
-                              className="px-2.5 py-1 text-xs border border-teal-200 text-teal-600 rounded-lg hover:bg-teal-50 transition font-semibold">
+                              className="px-2.5 py-1 text-xs border border-teal-400/30 text-teal-400 rounded-lg hover:bg-teal-400/10 transition font-semibold">
                               📝
                             </button>
                             <button onClick={() => setModifyTarget(b)}
-                              className="px-2.5 py-1 text-xs border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition font-semibold">
+                              className="px-2.5 py-1 text-xs border border-white/10 text-slate-300 rounded-lg hover:bg-white/5 transition font-semibold">
                               ✏️
                             </button>
                             <button onClick={() => handleCancelBooking(b.id)}
-                              className="px-2.5 py-1 text-xs border border-red-200 text-red-500 rounded-lg hover:bg-red-50 transition font-semibold">
+                              className="px-2.5 py-1 text-xs border border-red-400/30 text-red-400 rounded-lg hover:bg-red-400/10 transition font-semibold">
                               ✕
                             </button>
                           </>
@@ -737,38 +737,38 @@ export default function TeacherDashboard() {
           {tab === 'availability' && (
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-slate-900">Disponibilités hebdomadaires</h2>
+                <h2 className="font-bold text-white">Disponibilités hebdomadaires</h2>
                 <button onClick={() => setShowForm(!showForm)}
                   className={`px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm ${
-                    showForm ? 'border border-slate-200 text-slate-600 hover:bg-slate-50 bg-white' : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white'
+                    showForm ? 'border border-white/10 text-slate-300 hover:bg-white/5 bg-[#111827]' : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white'
                   }`}>
                   {showForm ? 'Annuler' : '+ Ajouter un créneau'}
                 </button>
               </div>
 
               {showForm && (
-                <div className="bg-white rounded-3xl p-5 mb-5 shadow-sm">
-                  <h3 className="font-semibold text-slate-900 mb-4">Nouveau créneau</h3>
+                <div className="bg-[#111827] rounded-3xl p-5 mb-5 shadow-sm border border-white/10">
+                  <h3 className="font-semibold text-white mb-4">Nouveau créneau</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Jour de la semaine</label>
+                      <label className="block text-xs font-semibold text-slate-400 mb-1.5">Jour de la semaine</label>
                       <select value={form.day_of_week}
                         onChange={(e) => setForm({ ...form, day_of_week: parseInt(e.target.value) })}
-                        className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-400 outline-none text-sm bg-white">
+                        className="w-full px-3 py-2.5 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none text-sm bg-[#0d1a2e] text-white">
                         {DAYS.map((d, i) => <option key={i} value={i}>{d}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Heure de début</label>
+                      <label className="block text-xs font-semibold text-slate-400 mb-1.5">Heure de début</label>
                       <input type="time" value={form.start_time}
                         onChange={(e) => setForm({ ...form, start_time: e.target.value })}
-                        className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-400 outline-none text-sm" />
+                        className="w-full px-3 py-2.5 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none text-sm bg-[#0d1a2e] text-white" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Heure de fin</label>
+                      <label className="block text-xs font-semibold text-slate-400 mb-1.5">Heure de fin</label>
                       <input type="time" value={form.end_time}
                         onChange={(e) => setForm({ ...form, end_time: e.target.value })}
-                        className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-400 outline-none text-sm" />
+                        className="w-full px-3 py-2.5 border border-white/10 rounded-xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none text-sm bg-[#0d1a2e] text-white" />
                     </div>
                   </div>
                   <div className="flex gap-3 mt-4">
@@ -777,7 +777,7 @@ export default function TeacherDashboard() {
                       {saving ? 'Ajout en cours…' : 'Ajouter'}
                     </button>
                     <button onClick={() => setShowForm(false)}
-                      className="px-5 py-2 border border-slate-200 rounded-xl text-sm hover:bg-slate-50 transition font-medium">
+                      className="px-5 py-2 border border-white/10 rounded-xl text-sm text-slate-300 hover:bg-white/5 transition font-medium">
                       Annuler
                     </button>
                   </div>
@@ -791,23 +791,23 @@ export default function TeacherDashboard() {
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
                   {DAYS.map((day, i) => (
-                    <div key={i} className="bg-white rounded-3xl p-3 shadow-sm">
+                    <div key={i} className="bg-[#111827] rounded-3xl p-3 shadow-sm border border-white/5">
                       <div className="mb-2">
-                        <p className="font-bold text-slate-800 text-sm">{DAYS_SHORT[i]}</p>
+                        <p className="font-bold text-white text-sm">{DAYS_SHORT[i]}</p>
                         <p className="text-xs text-slate-400">{day}</p>
                       </div>
                       {availByDay[i].length === 0 ? (
-                        <p className="text-xs text-slate-300 italic">Aucun</p>
+                        <p className="text-xs text-slate-500 italic">Aucun</p>
                       ) : (
                         <div className="space-y-1.5">
                           {availByDay[i].map((slot) => (
                             <div key={slot.id}
-                              className="flex items-center justify-between bg-cyan-50 rounded-xl px-2 py-1.5 border border-cyan-100">
-                              <span className="text-xs font-semibold text-cyan-700">
+                              className="flex items-center justify-between bg-cyan-400/10 rounded-xl px-2 py-1.5 border border-cyan-400/20">
+                              <span className="text-xs font-semibold text-cyan-400">
                                 {slot.start_time.substring(0,5)}–{slot.end_time.substring(0,5)}
                               </span>
                               <button onClick={() => handleDeleteSlot(slot.id)}
-                                className="text-red-300 hover:text-red-500 text-xs ml-1 leading-none transition">✕</button>
+                                className="text-red-400/50 hover:text-red-400 text-xs ml-1 leading-none transition">✕</button>
                             </div>
                           ))}
                         </div>
