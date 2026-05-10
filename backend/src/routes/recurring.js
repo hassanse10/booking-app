@@ -192,8 +192,10 @@ router.post('/waitlist', async (req, res) => {
   }
 });
 
-// GET /api/recurring/waitlist  — teacher sees all waitlisted slots
+// GET /api/recurring/waitlist  — teacher only
 router.get('/waitlist', async (req, res) => {
+  if (req.user.role !== 'teacher')
+    return res.status(403).json({ error: 'Teacher access required' });
   try {
     await ensureWaitlistTable();
     const { rows } = await pool.query(

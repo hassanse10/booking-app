@@ -326,7 +326,7 @@ export default function StudentDashboard() {
     if (!selectedDate) return;
     setWaitlistLoading(true);
     try {
-      await api.post('/recurring/waitlist', { date: selectedDate, start_time: '09:00', duration });
+      await api.post('/recurring/waitlist', { date: selectedDate, start_time: selectedSlot?.start || '09:00', duration });
       setWaitlistJoined(true);
     } catch (err) {
       alert(err.response?.data?.error || "Échec de l'inscription à la liste d'attente");
@@ -345,11 +345,12 @@ export default function StudentDashboard() {
     }
   };
 
-  const isBookingPast = (booking) => new Date(`${booking.date}T${booking.end_time}`) < new Date();
+  const dateStr = (d) => (typeof d === 'string' && d.includes('T') ? d.split('T')[0] : d);
+  const isBookingPast = (booking) => new Date(`${dateStr(booking.date)}T${booking.end_time}`) < new Date();
   const selectedDuration = getDuration(duration);
   const confirmedBookings = bookings.filter(b => b.status === 'confirmed');
-  const upcomingBookings  = confirmedBookings.filter(b => new Date(`${b.date}T${b.start_time}`) > new Date())
-                              .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const upcomingBookings  = confirmedBookings.filter(b => new Date(`${dateStr(b.date)}T${b.start_time}`) > new Date())
+                              .sort((a, b) => new Date(dateStr(a.date)) - new Date(dateStr(b.date)));
   const totalHours        = confirmedBookings.reduce((s, b) => s + parseInt(b.duration), 0) / 60;
   const totalSpent        = confirmedBookings.reduce((s, b) => s + (durPrice(b.duration) || 0), 0);
   const nextSession       = upcomingBookings[0];
