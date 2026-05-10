@@ -246,7 +246,7 @@ router.get('/conversion-funnel', requireTeacher, async (req, res) => {
 });
 
 // GET /api/analytics/student-progress/:student_id - Individual student progress
-router.get('/student-progress/:student_id', async (req, res) => {
+router.get('/student-progress/:student_id', requireTeacher, async (req, res) => {
   try {
     const { student_id } = req.params;
 
@@ -336,7 +336,7 @@ router.get('/invoices-due', requireTeacher, async (req, res) => {
   try {
     const { rows } = await pool.query(
       `SELECT i.*, s.first_name, s.last_name, s.email,
-              CURRENT_DATE - i.due_at as days_overdue
+              (CURRENT_DATE - i.due_at::date)::int as days_overdue
        FROM invoices i
        JOIN students s ON i.student_id = s.id
        WHERE i.status IN ('sent', 'overdue') AND i.due_at < NOW()

@@ -43,25 +43,20 @@ export default function TeacherAnalytics() {
   const [invoices,   setInvoices]   = useState(null);
 
   useEffect(() => {
-    Promise.all([
+    Promise.allSettled([
       api.get('/analytics/revenue'),
       api.get('/analytics/engagement'),
       api.get('/analytics/peak-hours'),
       api.get('/analytics/conversion-funnel'),
       api.get('/analytics/invoices-due'),
-    ])
-      .then(([r, e, p, f, i]) => {
-        setRevenue(r.data);
-        setEngagement(e.data);
-        setPeakHours(p.data);
-        setFunnel(f.data);
-        setInvoices(i.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError('Erreur lors du chargement des données');
-        setLoading(false);
-      });
+    ]).then(([r, e, p, f, i]) => {
+      if (r.status === 'fulfilled') setRevenue(r.value.data);
+      if (e.status === 'fulfilled') setEngagement(e.value.data);
+      if (p.status === 'fulfilled') setPeakHours(p.value.data);
+      if (f.status === 'fulfilled') setFunnel(f.value.data);
+      if (i.status === 'fulfilled') setInvoices(i.value.data);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
