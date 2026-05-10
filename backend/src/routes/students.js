@@ -96,7 +96,7 @@ router.put('/me', async (req, res) => {
     const optionalFields = [phone || student.phone, bio || student.bio, profile_picture_url || student.profile_picture_url, timezone || student.timezone, preferred_days || student.preferred_days];
     const filledOptional = optionalFields.filter(f => f).length;
 
-    if (student.first_name && student.last_name && student.email && student.study_level && filledOptional >= 2) {
+    if (student.first_name && student.last_name && student.email && student.study_level && filledOptional >= 2 && !student.profile_completed_at) {
       profileCompletedAt = new Date();
       updateFields.push(`profile_completed_at = $${paramIndex}`);
       updateValues.push(profileCompletedAt);
@@ -132,8 +132,11 @@ router.put('/me', async (req, res) => {
 
 // GET /api/students/:id/ratings - Get all ratings for a specific student
 router.get('/:id/ratings', async (req, res) => {
+  const { id } = req.params;
+  if (req.user.role === 'student' && parseInt(id) !== req.user.id)
+    return res.status(403).json({ error: 'Access denied' });
+
   try {
-    const { id } = req.params;
     const { minRating = 1, maxRating = 5 } = req.query;
 
     const { rows } = await pool.query(

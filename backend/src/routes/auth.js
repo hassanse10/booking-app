@@ -5,10 +5,14 @@ const pool     = require('../config/database');
 
 const router = express.Router();
 
-const JWT_SECRET      = process.env.JWT_SECRET       || 'teacher_booking_jwt_secret_key_2024_abc123xyz';
-const TEACHER_EMAIL   = process.env.TEACHER_EMAIL    || 'teacher@example.com';
-const TEACHER_PASSWORD = process.env.TEACHER_PASSWORD || 'teacher123';
+const JWT_SECRET      = process.env.JWT_SECRET;
+const TEACHER_EMAIL   = process.env.TEACHER_EMAIL;
+const TEACHER_PASSWORD = process.env.TEACHER_PASSWORD;
 const TEACHER_NAME    = process.env.TEACHER_NAME     || 'Ahmed Ben Ali';
+
+if (!JWT_SECRET)       console.error('[STARTUP] JWT_SECRET is not set — authentication will fail');
+if (!TEACHER_EMAIL)    console.error('[STARTUP] TEACHER_EMAIL is not set — teacher login will fail');
+if (!TEACHER_PASSWORD) console.error('[STARTUP] TEACHER_PASSWORD is not set — teacher login will fail');
 
 const signToken = (payload) =>
   jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });

@@ -12,6 +12,19 @@ const router = express.Router();
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const TIME_RE = /^\d{2}:\d{2}$/;
+
+const validateDateTimeFields = (date, start_time) => {
+  if (!DATE_RE.test(date))       return 'date must be in YYYY-MM-DD format';
+  if (!TIME_RE.test(start_time)) return 'start_time must be in HH:MM format';
+  const d = new Date(date + 'T00:00:00');
+  if (isNaN(d.getTime()))        return 'date is not a valid calendar date';
+  const [h, m] = start_time.split(':').map(Number);
+  if (h > 23 || m > 59)         return 'start_time is not a valid time';
+  return null;
+};
+
 const calcEndTime = (start_time, durationMins) => {
   const [h, m]  = start_time.split(':').map(Number);
   const total   = h * 60 + m + durationMins;
@@ -80,6 +93,9 @@ router.post('/', authenticateToken, async (req, res) => {
   if (![60, 90, 120].includes(durationMins))
     return res.status(400).json({ error: 'Duration must be 60, 90, or 120' });
 
+  const validErr = validateDateTimeFields(date, start_time);
+  if (validErr) return res.status(400).json({ error: validErr });
+
   const end_time = calcEndTime(start_time, durationMins);
 
   const client = await pool.connect();
@@ -142,6 +158,9 @@ router.put('/:id', authenticateToken, async (req, res) => {
   const durationMins = parseInt(duration);
   if (![60, 90, 120].includes(durationMins))
     return res.status(400).json({ error: 'Duration must be 60, 90, or 120' });
+
+  const validErr = validateDateTimeFields(date, start_time);
+  if (validErr) return res.status(400).json({ error: validErr });
 
   const end_time = calcEndTime(start_time, durationMins);
 

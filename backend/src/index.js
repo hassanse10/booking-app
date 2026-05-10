@@ -21,16 +21,15 @@ const {
 const app  = express();
 const PORT = process.env.PORT || 5000;
 
-// Accept FRONTEND_URL (comma-separated list) or fall back to allowing all origins
+// Accept FRONTEND_URL (comma-separated list) or fall back to local dev
 const rawOrigins = process.env.FRONTEND_URL || '';
 const allowedOrigins = rawOrigins
   ? rawOrigins.split(',').map((o) => o.trim()).filter(Boolean)
-  : [];
+  : ['http://localhost:5173'];
 
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.length === 0) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
