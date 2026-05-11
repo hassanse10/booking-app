@@ -9,6 +9,7 @@ import StudentProfile    from './pages/StudentProfile';
 import TeacherAnalytics  from './pages/TeacherAnalytics';
 import StudentProgress   from './pages/StudentProgress';
 import InvoiceHistory    from './pages/InvoiceHistory';
+import ConfirmEmail      from './pages/ConfirmEmail';
 
 function Spinner() {
   return (
@@ -37,6 +38,7 @@ function AppRoutes() {
       <Route path="/"          element={!user ? <Home /> : <Navigate to={home} replace />} />
       <Route path="/login"     element={!user ? <Login />    : <Navigate to={home} replace />} />
       <Route path="/register"  element={!user ? <Register /> : <Navigate to="/dashboard" replace />} />
+      <Route path="/confirm/:token" element={<ConfirmEmail />} />
       <Route path="/dashboard" element={
         <ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>
       } />
