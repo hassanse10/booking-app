@@ -17,6 +17,7 @@ const MIGRATIONS = [
   `ALTER TABLE students ADD COLUMN IF NOT EXISTS profile_completed_at TIMESTAMPTZ`,
   `ALTER TABLE students ADD COLUMN IF NOT EXISTS email_confirmed      BOOLEAN DEFAULT false`,
   `ALTER TABLE students ADD COLUMN IF NOT EXISTS confirmation_token   TEXT`,
+  `CREATE INDEX IF NOT EXISTS idx_students_confirmation_token ON students(confirmation_token)`,
 
   // bookings — new tracking columns
   `ALTER TABLE bookings ADD COLUMN IF NOT EXISTS teacher_notes     TEXT`,
@@ -144,7 +145,6 @@ const TABLES = [
   `CREATE INDEX IF NOT EXISTS idx_notifications_student_id ON notifications(student_id)`,
   `CREATE INDEX IF NOT EXISTS idx_recurring_bookings_student_id ON recurring_bookings(student_id)`,
   `CREATE INDEX IF NOT EXISTS idx_session_feedback_booking_id ON session_feedback(booking_id)`,
-  `CREATE INDEX IF NOT EXISTS idx_students_confirmation_token  ON students(confirmation_token)`,
 ];
 
 // ── Production: real PostgreSQL via pg ────────────────────────────────────────
