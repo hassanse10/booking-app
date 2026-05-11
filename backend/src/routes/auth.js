@@ -1,7 +1,9 @@
 const express  = require('express');
+const crypto   = require('crypto');
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
 const pool     = require('../config/database');
+const { sendConfirmationEmail } = require('../services/resendService');
 
 const router = express.Router();
 
@@ -29,17 +31,25 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ error: 'Email already registered' });
 
     const password_hash = await bcrypt.hash(password, 12);
+    const confirmation_token = crypto.randomBytes(32).toString('hex');
+
     const { rows } = await pool.query(
-      `INSERT INTO students (first_name, last_name, email, study_level, password_hash)
-       VALUES ($1,$2,$3,$4,$5)
-       RETURNING id, first_name, last_name, email, study_level`,
-      [first_name, last_name, email, study_level, password_hash],
+      `INSERT INTO students (first_name, last_name, email, study_level, password_hash, confirmation_token, email_confirmed)
+       VALUES ($1,$2,$3,$4,$5,$6,false)
+       RETURNING id, first_name, last_name, email, study_level, email_confirmed`,
+      [first_name, last_name, email, study_level, password_hash, confirmation_token],
     );
 
     const student = rows[0];
-    const token = signToken({ id: student.id, email: student.email, role: 'student',
+    const token = signToken({
+      id: student.id, email: student.email, role: 'student',
       first_name: student.first_name, last_name: student.last_name,
-      study_level: student.study_level });
+      study_level: student.study_level, email_confirmed: false,
+    });
+
+    // Fire-and-forget — don't block registration if email fails
+    sendConfirmationEmail(student.email, student.first_name, confirmation_token)
+      .catch((err) => console.error('Confirmation email error:', err.message));
 
     res.status(201).json({ token, user: { ...student, role: 'student' } });
   } catch (err) {
