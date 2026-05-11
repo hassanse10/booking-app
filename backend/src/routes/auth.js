@@ -95,4 +95,38 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// GET /api/auth/confirm/:token
+router.get('/confirm/:token', async (req, res) => {
+  const { token } = req.params;
+  if (!token) return res.status(400).json({ error: 'Token required' });
+
+  try {
+    const { rows } = await pool.query(
+      'SELECT id, first_name, last_name, email, study_level FROM students WHERE confirmation_token = $1 AND email_confirmed = false',
+      [token],
+    );
+
+    if (!rows.length)
+      return res.status(400).json({ error: 'Invalid or already used link' });
+
+    const student = rows[0];
+
+    await pool.query(
+      'UPDATE students SET email_confirmed = true, confirmation_token = NULL WHERE id = $1',
+      [student.id],
+    );
+
+    const freshToken = signToken({
+      id: student.id, email: student.email, role: 'student',
+      first_name: student.first_name, last_name: student.last_name,
+      study_level: student.study_level, email_confirmed: true,
+    });
+
+    res.json({ token: freshToken, user: { ...student, role: 'student', email_confirmed: true } });
+  } catch (err) {
+    console.error('Confirm error:', err.message);
+    res.status(500).json({ error: 'Confirmation failed' });
+  }
+});
+
 module.exports = router;
