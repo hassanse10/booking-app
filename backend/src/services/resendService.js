@@ -6,6 +6,7 @@ const FRONTEND_URL = (process.env.FRONTEND_URL || 'http://localhost:5173').split
 const FROM = 'noreply@ibooknow.site';
 
 async function sendConfirmationEmail(toEmail, firstName, token) {
+  const name = firstName || 'là';
   const confirmUrl = `${FRONTEND_URL}/confirm/${token}`;
 
   await resend.emails.send({
@@ -23,7 +24,7 @@ async function sendConfirmationEmail(toEmail, firstName, token) {
       <h1 style="margin:0;color:#fff;font-size:22px;font-weight:700">Bienvenue sur iBookNow !</h1>
     </div>
     <div style="padding:32px">
-      <p style="color:#374151;font-size:16px;margin:0 0 16px">Bonjour ${firstName},</p>
+      <p style="color:#374151;font-size:16px;margin:0 0 16px">Bonjour ${name},</p>
       <p style="color:#6b7280;font-size:15px;margin:0 0 28px;line-height:1.6">
         Merci de vous être inscrit(e). Cliquez sur le bouton ci-dessous pour confirmer votre adresse e-mail et activer votre compte.
       </p>
