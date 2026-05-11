@@ -7,6 +7,12 @@ const { sendConfirmationEmail } = require('../services/resendService');
 
 const router = express.Router();
 
+// Ensure email-confirmation columns exist — runs once at startup
+pool.query(`ALTER TABLE students ADD COLUMN IF NOT EXISTS email_confirmed BOOLEAN DEFAULT false`)
+  .then(() => pool.query(`ALTER TABLE students ADD COLUMN IF NOT EXISTS confirmation_token TEXT`))
+  .then(() => console.log('Email confirmation columns ready'))
+  .catch((e) => console.error('Email column migration error:', e.message));
+
 const JWT_SECRET       = process.env.JWT_SECRET        || 'teacher_booking_jwt_secret_key_2024_abc123xyz';
 const TEACHER_EMAIL    = process.env.TEACHER_EMAIL     || 'teacher@example.com';
 const TEACHER_PASSWORD = process.env.TEACHER_PASSWORD  || 'teacher123';
