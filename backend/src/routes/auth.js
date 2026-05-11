@@ -87,7 +87,7 @@ router.post('/login', async (req, res) => {
     const { password_hash: _, ...safe } = student;
     const token = signToken({ id: safe.id, email: safe.email, role: 'student',
       first_name: safe.first_name, last_name: safe.last_name,
-      study_level: safe.study_level });
+      study_level: safe.study_level, email_confirmed: safe.email_confirmed ?? false });
     res.json({ token, user: { ...safe, role: 'student' } });
   } catch (err) {
     console.error('Login error:', err.message, err.code);
