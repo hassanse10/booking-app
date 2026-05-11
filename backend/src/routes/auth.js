@@ -44,12 +44,12 @@ router.post('/register', async (req, res) => {
     const token = signToken({
       id: student.id, email: student.email, role: 'student',
       first_name: student.first_name, last_name: student.last_name,
-      study_level: student.study_level, email_confirmed: false,
+      study_level: student.study_level, email_confirmed: student.email_confirmed,
     });
 
     // Fire-and-forget — don't block registration if email fails
     sendConfirmationEmail(student.email, student.first_name, confirmation_token)
-      .catch((err) => console.error('Confirmation email error:', err.message));
+      .catch((err) => console.error('Confirmation email error:', err));
 
     res.status(201).json({ token, user: { ...student, role: 'student' } });
   } catch (err) {
