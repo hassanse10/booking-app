@@ -60,9 +60,12 @@ const seedDemo = async () => {
     if (!rows.length) {
       const hash = await bcrypt.hash('demo1234', 10);
       await pool.query(
-        `INSERT INTO students (first_name, last_name, email, study_level, password_hash)
-         VALUES ($1,$2,$3,$4,$5) ON CONFLICT (email) DO NOTHING`,
+        `INSERT INTO students (first_name, last_name, email, study_level, password_hash, email_confirmed)
+         VALUES ($1,$2,$3,$4,$5,true) ON CONFLICT (email) DO NOTHING`,
         ['Sara', 'Dupont', 'sara.dupont@cours.fr', 'Terminale', hash],
+      );
+      await pool.query(
+        `UPDATE students SET email_confirmed = true WHERE email = 'sara.dupont@cours.fr'`,
       );
       console.log('Demo student re-seeded');
     }

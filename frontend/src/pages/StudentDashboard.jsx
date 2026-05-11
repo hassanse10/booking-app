@@ -375,6 +375,14 @@ export default function StudentDashboard() {
       </aside>
 
       <div className="flex-1 md:ml-16 flex flex-col overflow-hidden">
+        {!user.email_confirmed && (
+          <div className="bg-yellow-500/10 border-b border-yellow-500/30 px-5 py-3 flex items-center gap-2 shrink-0">
+            <span className="text-yellow-400 text-sm">⚠</span>
+            <p className="text-yellow-300 text-sm">
+              Vérifiez votre boîte mail pour confirmer votre adresse e-mail.
+            </p>
+          </div>
+        )}
 
         {/* Top bar */}
         <header className="bg-[#0d1526] border-b border-white/10 px-5 py-4 flex items-center justify-between gap-4 shrink-0">
