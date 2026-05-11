@@ -173,7 +173,9 @@ if (process.env.DATABASE_URL) {
     try {
       // 1. Create new tables (IF NOT EXISTS — safe to rerun)
       for (const sql of TABLES) {
-        await pool.query(sql);
+        try { await pool.query(sql); } catch (te) {
+          if (!te.message.includes('already exists')) console.warn('Table warning:', te.message);
+        }
       }
       console.log('Schema ready');
 
