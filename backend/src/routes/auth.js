@@ -98,11 +98,14 @@ router.post('/login', async (req, res) => {
 // GET /api/auth/confirm/:token
 router.get('/confirm/:token', async (req, res) => {
   const { token } = req.params;
-  if (!token) return res.status(400).json({ error: 'Token required' });
 
   try {
+    // Atomic: only matches unconfirmed rows, clears token in one query — no race condition
     const { rows } = await pool.query(
-      'SELECT id, first_name, last_name, email, study_level FROM students WHERE confirmation_token = $1 AND email_confirmed = false',
+      `UPDATE students
+       SET email_confirmed = true, confirmation_token = NULL
+       WHERE confirmation_token = $1 AND email_confirmed = false
+       RETURNING id, first_name, last_name, email, study_level`,
       [token],
     );
 
@@ -110,12 +113,6 @@ router.get('/confirm/:token', async (req, res) => {
       return res.status(400).json({ error: 'Invalid or already used link' });
 
     const student = rows[0];
-
-    await pool.query(
-      'UPDATE students SET email_confirmed = true, confirmation_token = NULL WHERE id = $1',
-      [student.id],
-    );
-
     const freshToken = signToken({
       id: student.id, email: student.email, role: 'student',
       first_name: student.first_name, last_name: student.last_name,
@@ -124,7 +121,7 @@ router.get('/confirm/:token', async (req, res) => {
 
     res.json({ token: freshToken, user: { ...student, role: 'student', email_confirmed: true } });
   } catch (err) {
-    console.error('Confirm error:', err.message);
+    console.error('Confirm error:', err);
     res.status(500).json({ error: 'Confirmation failed' });
   }
 });
